@@ -842,9 +842,47 @@ function attach(cv,kind,seed,big){const w=cv.clientWidth,h=cv.clientHeight;if(!w
     if(window.IntersectionObserver)new IntersectionObserver(es=>{o.vis=es[0].isIntersecting}).observe(cv)}
   Object.assign(o,{kind,w,h,dpr,big:!!big,q:rng(seed),t0:o.t0||performance.now()});paint(cv,o,performance.now())}
 const RM=matchMedia("(prefers-reduced-motion: reduce)").matches;
-(function loop(now){if(now-last>=(window.__nogl?80:33)&&!document.hidden){last=now;for(const[cv,o]of live){if(!cv.isConnected){live.delete(cv);continue}if(o.vis&&cv.offsetParent!==null&&(!o.gate||o.gate()))paint(cv,o,RM?o.t0+4000:now)}}requestAnimationFrame(loop)})(performance.now());
+(function loop(now){if(now-last>=(window.__nogl||window.__soft?80:33)&&!document.hidden){last=now;for(const[cv,o]of live){if(!cv.isConnected){live.delete(cv);continue}if(o.vis&&cv.offsetParent!==null&&(!o.gate||o.gate()))paint(cv,o,RM?o.t0+4000:now)}}requestAnimationFrame(loop)})(performance.now());
 return{attach,live};
 })();
+
+/* A small software renderer for computers where 3D graphics (WebGL) are switched off. The site's own
+   three.js scene still runs, so the DNA flows, moves between sections and dodges text exactly as before,
+   and the globe still finds its free spot; only the drawing is done here with a 2D canvas. */
+window.SoftRenderer=function(cv){
+  const x=cv.getContext("2d");let W=1,H=1,dpr=1,last=0;
+  const V=window.THREE&&THREE.Vector3,a=new V(),b=new V(),c=new V();
+  this.domElement=cv;
+  this.setPixelRatio=p=>{dpr=Math.min(p||1,1.5)};
+  this.setSize=(w,h)=>{W=w;H=h;cv.width=Math.round(w*dpr);cv.height=Math.round(h*dpr);cv.style.width=w+"px";cv.style.height=h+"px"};
+  const mix=(col,t,to)=>{const r=col.r+(to-col.r)*t,g=col.g+(to-col.g)*t,bb=col.b+(to-col.b)*t;return`rgb(${r*255|0},${g*255|0},${bb*255|0})`};
+  this.render=(scene,cam)=>{const now=performance.now();if(now-last<38)return;last=now;
+    scene.updateMatrixWorld();cam.updateMatrixWorld();const vi=cam.matrixWorldInverse,f=H/(2*Math.tan(cam.fov*Math.PI/360)),items=[];
+    const S=(p,out)=>{c.copy(p).applyMatrix4(vi);const z=-c.z;if(z<=.1)return null;out=out||{};out.X=W/2+c.x*f/z;out.Y=H/2-c.y*f/z;out.z=z;out.k=f/z;return out};
+    const off=p=>p.X<-80||p.X>W+80||p.Y<-80||p.Y>H+80;
+    scene.traverseVisible(o=>{if(!o.isMesh&&!o.isLine)return;const g=o.geometry,m=o.material,t=g.type,op=m.transparent?m.opacity:1,col=m.color,basic=m.isMeshBasicMaterial||m.isLineBasicMaterial;
+      const sc=o.matrixWorld.getMaxScaleOnAxis();
+      if(t==="SphereGeometry"){const p=S(a.setFromMatrixPosition(o.matrixWorld));if(!p||off(p))return;const r=g.parameters.radius*sc*p.k;if(r<.3)return;
+        const big=r>40;items.push({z:p.z+(big?0:0),f:()=>{x.globalAlpha=op;if(basic){x.fillStyle=mix(col,0,1);x.beginPath();x.arc(p.X,p.Y,r,0,7);x.fill()}else{
+          const gr=x.createRadialGradient(p.X-r*.35,p.Y-r*.4,r*.1,p.X,p.Y,r);const e=m.emissive&&m.emissiveIntensity?.15:0;gr.addColorStop(0,mix(col,.6+e,1));gr.addColorStop(.6,mix(col,0,1));gr.addColorStop(1,mix(col,.32,0));
+          x.fillStyle=gr;x.beginPath();x.arc(p.X,p.Y,r,0,7);x.fill()}x.globalAlpha=1}})}
+      else if(t==="CylinderGeometry"){const h=g.parameters.height/2,p=S(a.set(0,-h,0).applyMatrix4(o.matrixWorld)),q=S(b.set(0,h,0).applyMatrix4(o.matrixWorld),{});if(!p||!q||(off(p)&&off(q)))return;
+        const e=o.matrixWorld.elements,sx=Math.hypot(e[0],e[1],e[2]),w=Math.max(1,2*g.parameters.radiusTop*sx*(p.k+q.k)/2),c1=mix(col,0,1),hl=mix(col,.45,1);
+        items.push({z:(p.z+q.z)/2,f:()=>{x.globalAlpha=op;x.lineCap="round";x.strokeStyle=c1;x.lineWidth=w;x.beginPath();x.moveTo(p.X,p.Y);x.lineTo(q.X,q.Y);x.stroke();
+          x.strokeStyle=hl;x.lineWidth=w*.34;x.beginPath();x.moveTo(p.X-w*.12,p.Y-w*.16);x.lineTo(q.X-w*.12,q.Y-w*.16);x.stroke();x.globalAlpha=1}})}
+      else if(t==="TubeGeometry"){const path=g.parameters.path,n=150,rad=g.parameters.radius*sc,c1=mix(col,.1,1);let prev=S(a.copy(path.getPointAt(0)).applyMatrix4(o.matrixWorld),{});
+        for(let i=1;i<=n;i++){const cur=S(a.copy(path.getPointAt(i/n)).applyMatrix4(o.matrixWorld),{}),p0=prev;prev=cur;if(!p0||!cur||(off(p0)&&off(cur)))continue;const w=Math.max(1,2*rad*(p0.k+cur.k)/2);
+          items.push({z:(p0.z+cur.z)/2+.02,f:()=>{x.lineCap="round";x.strokeStyle=c1;x.lineWidth=w;x.beginPath();x.moveTo(p0.X,p0.Y);x.lineTo(cur.X,cur.Y);x.stroke()}})}}
+      else if(t==="TorusGeometry"){const R=g.parameters.radius,pts=[];for(let i=0;i<=72;i++){const an=i/72*Math.PI*2;const p=S(a.set(Math.cos(an)*R,Math.sin(an)*R,0).applyMatrix4(o.matrixWorld),{});if(p)pts.push(p)}
+        const z=pts.reduce((s,p)=>s+p.z,0)/Math.max(1,pts.length);items.push({z,f:()=>{x.globalAlpha=op;x.strokeStyle=mix(col,0,1);x.lineWidth=1.2;x.beginPath();pts.forEach((p,i)=>i?x.lineTo(p.X,p.Y):x.moveTo(p.X,p.Y));x.stroke();x.globalAlpha=1}})}
+      else if(t==="RingGeometry"){const p=S(a.setFromMatrixPosition(o.matrixWorld));if(!p)return;const r=g.parameters.outerRadius*sc*p.k;items.push({z:p.z-.01,f:()=>{x.globalAlpha=op;x.strokeStyle=mix(col,0,1);x.lineWidth=1.4;x.beginPath();x.arc(p.X,p.Y,r,0,7);x.stroke();x.globalAlpha=1}})}
+      else if(o.isLine){const pos=g.attributes.position,seg=o.isLineSegments,n=pos.count,P=[];for(let i=0;i<n;i++){P.push(S(a.fromBufferAttribute(pos,i).applyMatrix4(o.matrixWorld),{}))}
+        const cen=S(a.setFromMatrixPosition(o.matrixWorld));const z=cen?cen.z:10;
+        items.push({z:seg?z+.5:z-.05,f:()=>{x.globalAlpha=op;x.strokeStyle=mix(col,0,1);x.lineWidth=seg?1:1.4;x.beginPath();
+          if(seg){for(let i=0;i+1<n;i+=2){const p=P[i],q=P[i+1];if(p&&q){x.moveTo(p.X,p.Y);x.lineTo(q.X,q.Y)}}}else{let pen=false;for(const p of P){if(!p){pen=false;continue}pen?x.lineTo(p.X,p.Y):x.moveTo(p.X,p.Y);pen=true}}
+          x.stroke();x.globalAlpha=1}})}});
+    items.sort((p,q)=>q.z-p.z);x.setTransform(dpr,0,0,dpr,0,0);x.clearRect(0,0,W,H);for(const it of items)it.f()};
+};
 
 </script>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.3.23/dist/lenis.min.js"></script>
@@ -1249,9 +1287,9 @@ if(window.Lenis&&!reduce){try{const lenis=new Lenis({lerp:.085,smoothWheel:true,
 const cv=document.getElementById("gl");
 let ok=false;
 try{ok=!!window.THREE&&!!(cv.getContext("webgl")||cv.getContext("experimental-webgl"))}catch(e){ok=false}
-if(!ok){cv.style.display="none";window.__nogl=true;document.documentElement.classList.add("nogl");return}
+if(!ok){if(window.THREE&&window.SoftRenderer){window.__soft=true;document.documentElement.classList.add("soft3d")}else{cv.style.display="none";window.__nogl=true;document.documentElement.classList.add("nogl");return}}
 
-const renderer=new THREE.WebGLRenderer({canvas:cv,antialias:true,alpha:true});
+const renderer=window.__soft?new SoftRenderer(cv):new THREE.WebGLRenderer({canvas:cv,antialias:true,alpha:true});
 renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));
 const scene=new THREE.Scene();
 const cam=new THREE.PerspectiveCamera(32,1,.1,100);cam.position.set(0,0,13);
@@ -1461,7 +1499,7 @@ function build(){
   rails.forEach(pts=>{d.strokeStyle=c.sleep;d.lineWidth=1;let acc=0;for(let i=1;i<pts.length;i++){const a=pts[i-1],b=pts[i],L=Math.hypot(b.x-a.x,b.y-a.y),nx=-(b.y-a.y)/L,ny=(b.x-a.x)/L;acc+=L;if(acc>9){acc=0;d.beginPath();d.moveTo(b.x-nx*5,b.y-ny*5);d.lineTo(b.x+nx*5,b.y+ny*5);d.stroke()}}
     d.strokeStyle=c.rail;d.lineWidth=1.4;[-2.6,2.6].forEach(o=>{d.beginPath();pts.forEach((p,i)=>{const q=pts[Math.min(i+1,pts.length-1)],pp=pts[Math.max(i-1,0)],L=Math.hypot(q.x-pp.x,q.y-pp.y)||1,nx=-(q.y-pp.y)/L,ny=(q.x-pp.x)/L;i?d.lineTo(p.x+nx*o,p.y+ny*o):d.moveTo(p.x+nx*o,p.y+ny*o)});d.stroke()});
     for(let k=1;k<6;k++){const p=pts[Math.round(200*k/6)];d.fillStyle=c.stn;d.strokeStyle=c.stnS;d.lineWidth=2;d.beginPath();d.arc(p.x,p.y,5.2,0,7);d.fill();d.stroke()}});
-  if(RM||window.__nogl)return;
+  if(RM||window.__nogl||window.__soft)return;
   // electricity: pulses running along the transmission lines
   edges.forEach(([a,b],i)=>{for(let k=0;k<2;k++){const el=document.createElement("i");el.className="pulse";fx.appendChild(el);const fwd=r()<.5,A=fwd?a:b,B=fwd?b:a,L=Math.hypot(B.x-A.x,B.y-A.y),dur=L/(38+r()*30)*1000;
     el.animate([{transform:`translate3d(${A.x}px,${A.y}px,0)`,opacity:0},{opacity:1,offset:.1},{opacity:1,offset:.9},{transform:`translate3d(${B.x}px,${B.y}px,0)`,opacity:0}],{duration:dur,iterations:Infinity,delay:-r()*dur,easing:"linear"})}});
@@ -1498,6 +1536,8 @@ function story(id){const cv=document.getElementById(id),cfg=CFG[id];if(!cv)retur
   const stage=box.querySelector(".jr-stage"),mas=document.getElementById("mascot");
   if(stage&&mas&&!stage.querySelector(".jr-av")){const av=mas.cloneNode(true);av.removeAttribute("id");av.removeAttribute("style");av.removeAttribute("role");av.removeAttribute("aria-label");av.className="jr-av";av.setAttribute("aria-hidden","true");
     av.querySelectorAll("#mascotImg").forEach(n=>n.removeAttribute("id"));
+    // give the copied eye layer its own ids, so its gradients and clip paths do not clash with the original
+    const sfx="-"+id;av.querySelectorAll("[id]").forEach(n=>{const old=n.id,nw=old+sfx;n.id=nw;av.querySelectorAll("*").forEach(e=>{for(const at of [...e.attributes]){if(at.value.includes("#"+old+")")||at.value==="#"+old)e.setAttribute(at.name,at.value.split("#"+old+")").join("#"+nw+")").replace(new RegExp("^#"+old+"$"),"#"+nw))}})});
     av.querySelectorAll(".miris").forEach(g=>{g.classList.remove("miris");g.setAttribute("transform",`translate(${(+g.dataset.cx-11).toFixed(1)} ${(+g.dataset.cy+3).toFixed(1)})`)});stage.appendChild(av)}
   const items=[...document.querySelectorAll(cfg.items)];let act=0,S=0,dpr=1,c={},vis=false,last=0,l0=PL[cfg.places[0]].lon,p0=PL[cfg.places[0]].lat*.7,drag=null,idle=-1e9;
   const dots=box.querySelector(".jr-steps");if(dots){dots.innerHTML=items.map((_,i)=>`<i data-i="${i}"></i>`).join("")}
