@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script>(function(){var V=17;if(location.protocol.indexOf("http")!==0)return;try{fetch("version.json?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.json():null}).then(function(j){if(!j||!(j.v>V))return;var k="mk-reload-"+j.v;try{if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,"1")}catch(e){}location.replace(location.pathname+"?v="+j.v+location.hash)}).catch(function(){})}catch(e){}})();</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Mankirat Singh | Bioinformatics &amp; Data Science</title>
@@ -407,6 +408,9 @@ dialog[open]{animation:pop .28s cubic-bezier(.2,.9,.3,1.15)}
 #say.pop span{animation:saypop .5s cubic-bezier(.2,.8,.2,1.2)}
 @keyframes saypop{from{opacity:0;transform:translateY(5px)}}
 #say{transform:translate(var(--dx,0px),-100%)}
+.who .earth{display:block;margin-top:6px;max-width:34ch;white-space:normal;line-height:1.35}
+.who .earth i{font-style:italic;opacity:.85}
+@media (max-width:820px){.who .earth{max-width:26ch;font-size:13px}}
 @media (max-width:820px){#say{left:40%;max-width:min(230px,70vw);font-size:16px}}
 /* phone: the moving picture always keeps its space; long text is trimmed instead */
 @media (max-width:820px){.card .cvw{flex:1 1 auto;min-height:clamp(120px,19svh,190px)}.card .cbody{flex:none;padding:12px 6px 4px}.card h3{font-size:18px}
@@ -512,8 +516,8 @@ dialog[open]{animation:pop .28s cubic-bezier(.2,.9,.3,1.15)}
     <div class="frame" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
 
     <div class="hero-meta">
-      <div class="who"><strong>Mankirat Singh <span class="pa" lang="pa">ਮਨਕੀਰਤ ਸਿੰਘ</span></strong><span>Bioinformatician &amp; data scientist</span></div>
-      <div class="where"><span>Human from Earth, based in Cork</span><strong id="clock">--:--:--</strong></div>
+      <div class="who"><strong>Mankirat Singh <span class="pa" lang="pa">ਮਨਕੀਰਤ ਸਿੰਘ</span></strong><span>Bioinformatician &amp; data scientist</span><span class="earth">Human from Earth. Lives in Cork, the real capital of Ireland <i>(don&rsquo;t tell Dublin)</i></span></div>
+      <div class="where"><span>Local time</span><strong id="clock">--:--:--</strong></div>
       <div class="year-tag">Biology · Data · Models</div>
       <h1 class="hero-title">About<br>Mankirat</h1>
       <a class="scroll-cue" href="#about"><span>Scroll</span><b></b></a>
@@ -1074,6 +1078,7 @@ function drawCards(){track.querySelectorAll(".card canvas").forEach((cv,i)=>ANIM
 
 /* dialog */
 const dlg=document.getElementById("dlg");
+window.P=P;window.openP=i=>openP(i); // the terminal lists and opens projects
 function openP(i){const p=P[i];
   document.getElementById("d-when").textContent=p.when;
   document.getElementById("d-title").textContent=p.t;
