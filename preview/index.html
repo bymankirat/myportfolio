@@ -334,6 +334,7 @@ dialog[open]{animation:pop .28s cubic-bezier(.2,.9,.3,1.15)}
 }
 
 /* ===== background: power grid and rail network ===== */
+#dna2d{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;display:block;transition:opacity .3s}
 #net{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;display:block;transition:opacity .8s ease}
 #net-fx{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;transition:opacity .8s ease}
 #net-fx i{position:absolute;left:0;top:0;will-change:transform}
@@ -372,7 +373,9 @@ dialog[open]{animation:pop .28s cubic-bezier(.2,.9,.3,1.15)}
 
 /* ===== sticky story globes beside Résumé and Education ===== */
 .jr-globe{text-shadow:none}
-.jr-globe canvas{width:100%;aspect-ratio:1/1;display:block;cursor:grab;touch-action:pan-y}
+.jr-stage{position:relative}
+.jr-globe canvas{position:relative;z-index:1;width:100%;aspect-ratio:1/1;display:block;cursor:grab;touch-action:pan-y}
+.jr-av{display:none}
 .jr-cap{padding:14px 16px;border-radius:18px;background:var(--rail);border:1px solid var(--rail-line);min-height:96px}
 .jr-cap .k{display:block;font-size:11px;letter-spacing:.09em;text-transform:uppercase;font-weight:700;color:#8E3456}
 .jr-cap b{display:block;font-size:17px;line-height:1.25;margin:4px 0 3px}
@@ -387,7 +390,10 @@ dialog[open]{animation:pop .28s cubic-bezier(.2,.9,.3,1.15)}
 @media (min-width:821px){
   .journey{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:clamp(20px,3vw,48px);align-items:start}
   .journey .rail{grid-column:2}
-  .jr-globe{grid-column:1;grid-row:1;position:sticky;top:max(8vh,60px);align-self:start;justify-self:center;width:min(32vw,400px);margin-top:clamp(90px,14vh,160px);display:grid;gap:10px}
+  .jr-globe{grid-column:1;grid-row:1;position:sticky;top:max(6vh,48px);align-self:start;justify-self:center;width:min(36vw,470px);margin-top:clamp(90px,14vh,160px);display:grid;gap:10px}
+  .jr-globe canvas{width:74%}
+  .jr-av{display:block;position:absolute;right:-4%;bottom:-8%;width:36%;aspect-ratio:869/1500;z-index:2;pointer-events:none;filter:drop-shadow(0 16px 22px rgba(20,24,18,.3))}
+  .jr-av img,.jr-av svg{position:absolute;inset:0;width:100%;height:100%;display:block}
 }
 @media (max-width:820px){
   .jr-globe{position:sticky;top:max(8px,env(safe-area-inset-top,0px));z-index:5;display:grid;grid-template-columns:118px minmax(0,1fr);grid-template-rows:auto auto;column-gap:12px;align-items:center;margin:0 0 16px;padding:8px 12px 8px 8px;border-radius:20px;background:var(--rail);border:1px solid var(--rail-line);box-shadow:0 10px 26px -12px rgba(0,0,0,.3)}
@@ -527,7 +533,7 @@ dialog[open]{animation:pop .28s cubic-bezier(.2,.9,.3,1.15)}
   </section>
 
   <section class="journey" id="resume">
-    <aside class="jr-globe" aria-label="Where each role took place"><canvas id="rglobe" role="img" aria-label="Globe that turns to each place I did research as you scroll: Málaga, New Delhi and Mohali"></canvas><div class="jr-cap" aria-live="polite"></div><div class="jr-steps"></div></aside>
+    <aside class="jr-globe" aria-label="Where each role took place"><div class="jr-stage"><canvas id="rglobe" role="img" aria-label="Globe that turns to each place I did research as you scroll: Málaga, New Delhi and Mohali"></canvas></div><div class="jr-cap" aria-live="polite"></div><div class="jr-steps"></div></aside>
     <div class="rail">
       <h2 class="hand-h">Résumé</h2>
       <p class="rail-sub">Research, lab and data work</p>
@@ -599,7 +605,7 @@ dialog[open]{animation:pop .28s cubic-bezier(.2,.9,.3,1.15)}
 
 
   <section class="journey edu" id="education">
-    <aside class="jr-globe" aria-label="Where each degree took place"><canvas id="wglobe" role="img" aria-label="Globe that turns to each place I studied as you scroll: Cork, Mumbai and New Delhi"></canvas><div class="jr-cap" aria-live="polite"></div><div class="jr-steps"></div></aside>
+    <aside class="jr-globe" aria-label="Where each degree took place"><div class="jr-stage"><canvas id="wglobe" role="img" aria-label="Globe that turns to each place I studied as you scroll: Cork, Mumbai and New Delhi"></canvas></div><div class="jr-cap" aria-live="polite"></div><div class="jr-steps"></div></aside>
     <div class="rail">
       <h2 class="hand-h">Education</h2>
       <p class="rail-sub">Three degrees, from life sciences to computational biology</p>
@@ -836,7 +842,7 @@ function attach(cv,kind,seed,big){const w=cv.clientWidth,h=cv.clientHeight;if(!w
     if(window.IntersectionObserver)new IntersectionObserver(es=>{o.vis=es[0].isIntersecting}).observe(cv)}
   Object.assign(o,{kind,w,h,dpr,big:!!big,q:rng(seed),t0:o.t0||performance.now()});paint(cv,o,performance.now())}
 const RM=matchMedia("(prefers-reduced-motion: reduce)").matches;
-(function loop(now){if(now-last>=33&&!document.hidden){last=now;for(const[cv,o]of live){if(!cv.isConnected){live.delete(cv);continue}if(o.vis&&cv.offsetParent!==null&&(!o.gate||o.gate()))paint(cv,o,RM?o.t0+4000:now)}}requestAnimationFrame(loop)})(performance.now());
+(function loop(now){if(now-last>=(window.__nogl?80:33)&&!document.hidden){last=now;for(const[cv,o]of live){if(!cv.isConnected){live.delete(cv);continue}if(o.vis&&cv.offsetParent!==null&&(!o.gate||o.gate()))paint(cv,o,RM?o.t0+4000:now)}}requestAnimationFrame(loop)})(performance.now());
 return{attach,live};
 })();
 
@@ -1243,7 +1249,7 @@ if(window.Lenis&&!reduce){try{const lenis=new Lenis({lerp:.085,smoothWheel:true,
 const cv=document.getElementById("gl");
 let ok=false;
 try{ok=!!window.THREE&&!!(cv.getContext("webgl")||cv.getContext("experimental-webgl"))}catch(e){ok=false}
-if(!ok){cv.style.display="none";return}
+if(!ok){cv.style.display="none";window.__nogl=true;document.documentElement.classList.add("nogl");return}
 
 const renderer=new THREE.WebGLRenderer({canvas:cv,antialias:true,alpha:true});
 renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));
@@ -1455,7 +1461,7 @@ function build(){
   rails.forEach(pts=>{d.strokeStyle=c.sleep;d.lineWidth=1;let acc=0;for(let i=1;i<pts.length;i++){const a=pts[i-1],b=pts[i],L=Math.hypot(b.x-a.x,b.y-a.y),nx=-(b.y-a.y)/L,ny=(b.x-a.x)/L;acc+=L;if(acc>9){acc=0;d.beginPath();d.moveTo(b.x-nx*5,b.y-ny*5);d.lineTo(b.x+nx*5,b.y+ny*5);d.stroke()}}
     d.strokeStyle=c.rail;d.lineWidth=1.4;[-2.6,2.6].forEach(o=>{d.beginPath();pts.forEach((p,i)=>{const q=pts[Math.min(i+1,pts.length-1)],pp=pts[Math.max(i-1,0)],L=Math.hypot(q.x-pp.x,q.y-pp.y)||1,nx=-(q.y-pp.y)/L,ny=(q.x-pp.x)/L;i?d.lineTo(p.x+nx*o,p.y+ny*o):d.moveTo(p.x+nx*o,p.y+ny*o)});d.stroke()});
     for(let k=1;k<6;k++){const p=pts[Math.round(200*k/6)];d.fillStyle=c.stn;d.strokeStyle=c.stnS;d.lineWidth=2;d.beginPath();d.arc(p.x,p.y,5.2,0,7);d.fill();d.stroke()}});
-  if(RM)return;
+  if(RM||window.__nogl)return;
   // electricity: pulses running along the transmission lines
   edges.forEach(([a,b],i)=>{for(let k=0;k<2;k++){const el=document.createElement("i");el.className="pulse";fx.appendChild(el);const fwd=r()<.5,A=fwd?a:b,B=fwd?b:a,L=Math.hypot(B.x-A.x,B.y-A.y),dur=L/(38+r()*30)*1000;
     el.animate([{transform:`translate3d(${A.x}px,${A.y}px,0)`,opacity:0},{opacity:1,offset:.1},{opacity:1,offset:.9},{transform:`translate3d(${B.x}px,${B.y}px,0)`,opacity:0}],{duration:dur,iterations:Infinity,delay:-r()*dur,easing:"linear"})}});
@@ -1489,6 +1495,10 @@ const CFG={
 };
 function txt(el,sel){const n=el.querySelector(sel);return n?n.textContent.trim():""}
 function story(id){const cv=document.getElementById(id),cfg=CFG[id];if(!cv)return;const x=cv.getContext("2d"),box=cv.closest(".jr-globe"),cap=box.querySelector(".jr-cap");
+  const stage=box.querySelector(".jr-stage"),mas=document.getElementById("mascot");
+  if(stage&&mas&&!stage.querySelector(".jr-av")){const av=mas.cloneNode(true);av.removeAttribute("id");av.removeAttribute("style");av.removeAttribute("role");av.removeAttribute("aria-label");av.className="jr-av";av.setAttribute("aria-hidden","true");
+    av.querySelectorAll("#mascotImg").forEach(n=>n.removeAttribute("id"));
+    av.querySelectorAll(".miris").forEach(g=>{g.classList.remove("miris");g.setAttribute("transform",`translate(${(+g.dataset.cx-11).toFixed(1)} ${(+g.dataset.cy+3).toFixed(1)})`)});stage.appendChild(av)}
   const items=[...document.querySelectorAll(cfg.items)];let act=0,S=0,dpr=1,c={},vis=false,last=0,l0=PL[cfg.places[0]].lon,p0=PL[cfg.places[0]].lat*.7,drag=null,idle=-1e9;
   const dots=box.querySelector(".jr-steps");if(dots){dots.innerHTML=items.map((_,i)=>`<i data-i="${i}"></i>`).join("")}
   function setCap(i){const el=items[i];if(!el||!cap)return;const p=PL[cfg.places[i]];
@@ -1553,6 +1563,31 @@ box.addEventListener("pointerover",e=>{const t=e.target.closest("[data-i]");mark
 box.addEventListener("focusin",e=>{const t=e.target.closest("[data-i]");if(t)mark(t.dataset.i)});
 const btn=box.querySelector(".nd-copy");btn.addEventListener("click",async()=>{try{await navigator.clipboard.writeText(all);btn.textContent="Copied"}catch(e){const r=document.createRange();r.selectNodeContents(seq);const s=getSelection();s.removeAllRanges();s.addRange(r);btn.textContent="Selected"}setTimeout(()=>btn.textContent="Copy sequence",1600)});
 if(window.IntersectionObserver)new IntersectionObserver((es,o)=>{if(es[0].isIntersecting){box.classList.add("typed");o.disconnect()}},{threshold:.4}).observe(box);
+})();
+
+</script>
+<script>
+/* Fallback DNA for browsers where 3D (WebGL) is switched off: a light 2D double helix on the cover,
+   drawn about 20 times a second, so every visitor still sees the DNA. */
+(function(){
+function start(){if(!window.__nogl)return;
+  const RM=matchMedia("(prefers-reduced-motion: reduce)").matches,dk=document.documentElement.dataset.theme==="dark"||(document.documentElement.dataset.theme!=="light"&&matchMedia("(prefers-color-scheme: dark)").matches);
+  const cv=document.createElement("canvas");cv.id="dna2d";cv.setAttribute("aria-hidden","true");const gl=document.getElementById("gl");gl.parentNode.insertBefore(cv,gl);
+  const x=cv.getContext("2d");let W=0,H=0,dpr=1;const size=()=>{W=innerWidth;H=innerHeight;dpr=Math.min(devicePixelRatio||1,1.5);cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr)};size();addEventListener("resize",size);
+  const strand=dk?"#A9B59B":"#F1F2EA",edge=dk?"#5F6B57":"#C9CDBF",pair=[["#D9718E","#9A8FD8"],["#9A8FD8","#D9718E"],["#A4AF98","#ECEDE6"],["#ECEDE6","#A4AF98"]];
+  let last=0;
+  function frame(now){requestAnimationFrame(frame);if(now-last<50)return;last=now;const op=Math.max(0,1-scrollY/(innerHeight*.85));cv.style.opacity=op.toFixed(2);if(op<=0)return;
+    const t=RM?0:now/1000,wide=W>820,cx0=W*(wide?.52:.62),amp=Math.min(W,H)*(wide?.1:.13),n=30,step=H*1.25/n,shift=(t*26)%step;
+    x.setTransform(dpr,0,0,dpr,0,0);x.clearRect(0,0,W,H);const pts=[];
+    for(let i=-1;i<n;i++){const y=-H*.1+i*step+shift,a=(i-Math.floor(t*26/step))*.52+t*.8,cx=cx0+(y-H/2)*(wide?-.32:-.18);pts.push({y,a,cx,k:((i-Math.floor(t*26/step))%4+4)%4})}
+    const draw=(front)=>pts.forEach(p=>{const s=Math.sin(p.a),c=Math.cos(p.a);[[s,c,0],[-s,-c,1]].forEach(([ss,cc,j])=>{if((cc>0)!==front)return;const X=p.cx+ss*amp,r=6+cc*2.5;
+      x.fillStyle=strand;x.strokeStyle=edge;x.lineWidth=1;x.beginPath();x.arc(X,p.y,r,0,7);x.fill();x.stroke()})});
+    draw(false);
+    pts.forEach(p=>{const s=Math.sin(p.a),x1=p.cx+s*amp,x2=p.cx-s*amp,m=(x1+x2)/2,[c1,c2]=pair[p.k];x.lineWidth=6;x.lineCap="round";
+      x.strokeStyle=c1;x.beginPath();x.moveTo(x1,p.y);x.lineTo(m,p.y);x.stroke();x.strokeStyle=c2;x.beginPath();x.moveTo(m,p.y);x.lineTo(x2,p.y);x.stroke()});
+    draw(true)}
+  requestAnimationFrame(frame)}
+if(document.readyState==="loading")addEventListener("DOMContentLoaded",start);else setTimeout(start,0);
 })();
 
 </script>
