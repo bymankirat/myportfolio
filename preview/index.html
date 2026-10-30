@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta name="robots" content="noindex">
-<script>(function(){var V=21;if(location.protocol.indexOf("http")!==0)return;try{fetch("version.json?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.json():null}).then(function(j){if(!j||!(j.v>V))return;var k="mk-reload-"+j.v;try{if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,"1")}catch(e){}location.replace(location.pathname+"?v="+j.v+location.hash)}).catch(function(){})}catch(e){}})();</script>
+<script>(function(){var V=22;if(location.protocol.indexOf("http")!==0)return;try{fetch("version.json?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.json():null}).then(function(j){if(!j||!(j.v>V))return;var k="mk-reload-"+j.v;try{if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,"1")}catch(e){}location.replace(location.pathname+"?v="+j.v+location.hash)}).catch(function(){})}catch(e){}})();</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Mankirat Singh | Bioinformatics &amp; Data Science</title>
@@ -12,8 +12,8 @@
 <meta property="og:site_name" content="Mankirat Singh">
 <meta property="og:title" content="Mankirat Singh | Bioinformatics &amp; Data Science">
 <meta property="og:description" content="Bioinformatician and data scientist in Cork. 21 projects across omics, clinical data and Ireland's energy grid, from the wet lab to code.">
-<meta property="og:image" content="https://bymankirat.github.io/myportfolio/preview.jpg?v=21">
-<meta property="og:image:secure_url" content="https://bymankirat.github.io/myportfolio/preview.jpg?v=21">
+<meta property="og:image" content="https://bymankirat.github.io/myportfolio/preview.jpg?v=22">
+<meta property="og:image:secure_url" content="https://bymankirat.github.io/myportfolio/preview.jpg?v=22">
 <meta property="og:image:type" content="image/jpeg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -21,7 +21,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Mankirat Singh | Bioinformatics &amp; Data Science">
 <meta name="twitter:description" content="21 projects across omics, clinical data and Ireland's energy grid, from the wet lab to code.">
-<meta name="twitter:image" content="https://bymankirat.github.io/myportfolio/preview.jpg?v=21">
+<meta name="twitter:image" content="https://bymankirat.github.io/myportfolio/preview.jpg?v=22">
 <meta name="description" content="Mankirat Singh, bioinformatician and data scientist. Multi-omics analysis, statistics and machine learning in Python, R and SQL, backed by hands-on lab experience.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -424,7 +424,8 @@ dialog[open]{animation:pop .28s cubic-bezier(.2,.9,.3,1.15)}
 #say span{display:block}
 #say.pop span{animation:saypop .5s cubic-bezier(.2,.8,.2,1.2)}
 @keyframes saypop{from{opacity:0;transform:translateY(5px)}}
-#say{transform:translate(var(--dx,0px),-100%)}
+#say{transform:translate(var(--dx,0px),calc(-100% + var(--dy,0px)));transition:opacity .35s}
+#say.off{opacity:0}
 .where .earth{display:block;margin-top:6px;font-style:normal;line-height:1.35;color:var(--ink-soft);text-align:right;white-space:nowrap}
 @media (max-width:820px){.hero-meta .where{position:relative}.hero-meta .hero-title{margin-top:58px}.where .earth{position:absolute;right:0;top:52px;width:max-content;max-width:calc(100vw - 60px);white-space:nowrap;font-size:12.5px;margin:0;padding:4px 10px;border-radius:10px;background:color-mix(in srgb,var(--stage) 82%,transparent);color:var(--ink)}}
 @media (max-width:820px){#say{left:40%;max-width:min(230px,70vw);font-size:16px}}
@@ -1190,7 +1191,7 @@ if(window.Lenis&&!reduce){try{const lenis=new Lenis({lerp:.085,smoothWheel:true,
   const ids=["top","about","resume","education","work","toolkit","contact"],els=ids.map(i=>document.getElementById(i));
   function pose(id){const W=innerWidth,H=innerHeight;
     if(W<=820)return ({top:{x:.14*W,y:0,s:1,o:1},about:{x:.2*W,y:.06*H,s:.92,o:.16},resume:{x:-.05*W,y:.14*H,s:1.12,o:.18},education:{x:-.05*W,y:.14*H,s:1.12,o:.18},
-      work:{x:0,y:.2*H,s:1,o:0},toolkit:{x:0,y:.2*H,s:1,o:0},contact:{x:.3*W,y:.2*H,s:.5,o:1}})[id];
+      work:{x:0,y:.2*H,s:1,o:0},toolkit:{x:0,y:.2*H,s:1,o:0},contact:{x:.36*W,y:0,s:.42,o:1}})[id];
     return ({top:{x:.26*W,y:0,s:.8,o:1},about:{x:.32*W,y:.06*H,s:.66,o:1},
       resume:{x:-.34*W,y:.12*H,s:.78,o:0},education:{x:-.34*W,y:.12*H,s:.78,o:0},
       work:{x:-.34*W,y:.2*H,s:.78,o:0},toolkit:{x:.32*W,y:.1*H,s:.66,o:0},
@@ -1798,10 +1799,18 @@ function update(){const z=cur();if(z!==zone){zone=z;say(TIPS[z]||TIPS.top)}}
 let raf=0;addEventListener("scroll",()=>{if(!raf)raf=requestAnimationFrame(()=>{raf=0;update()})},{passive:true});
 update();
 })();
-/* keep the bubble inside the screen, wherever the avatar walks to */
-(function(){const b=document.getElementById("say"),m=document.getElementById("mascot");if(!b||!m)return;let dx=0;
-function fit(){requestAnimationFrame(fit);if(document.hidden)return;const r=b.getBoundingClientRect();if(!r.width)return;const s=r.width/(b.offsetWidth||1)||1,pad=10,base=r.left-dx*s;
-  let need=0;if(base<pad)need=pad-base;else if(base+r.width>innerWidth-pad)need=innerWidth-pad-r.width-base;const nd=Math.round(need/s);if(Math.abs(nd-dx)>=1){dx=nd;b.style.setProperty("--dx",dx+"px")}}
+/* keep the bubble inside the screen and off the big title, and only show it while the avatar is in front */
+(function(){const b=document.getElementById("say"),m=document.getElementById("mascot");if(!b||!m)return;let dx=0,dy=0,on=null;
+const title=document.querySelector(".hero-title");
+function fit(){requestAnimationFrame(fit);if(document.hidden)return;
+  const show=(parseFloat(m.style.opacity||"1")||0)>.85&&(innerWidth>820||scrollY<innerHeight*.5); // on phones the page is narrow, so he only talks on the cover
+  if(show!==on){on=show;b.classList.toggle("off",!show)}if(!show)return;
+  const r=b.getBoundingClientRect();if(!r.width)return;const s=r.width/(b.offsetWidth||1)||1,pad=10,base=r.left-dx*s,top0=r.top-dy*s;
+  let need=0;if(base<pad)need=pad-base;else if(base+r.width>innerWidth-pad)need=innerWidth-pad-r.width-base;
+  let down=0;if(title&&innerWidth<=820){const t=title.getBoundingClientRect(),meta=title.parentElement,mo=parseFloat(getComputedStyle(meta).opacity);
+    if(mo>.2&&t.right>base+need&&t.left<base+need+r.width&&t.bottom+8>top0&&t.top<top0+r.height)down=Math.min(110,t.bottom+8-top0)}
+  const nx=Math.round(need/s),ny=Math.round(down/s);
+  if(Math.abs(nx-dx)>=1){dx=nx;b.style.setProperty("--dx",dx+"px")}if(Math.abs(ny-dy)>=1){dy=ny;b.style.setProperty("--dy",dy+"px")}}
 requestAnimationFrame(fit)})();
 
 </script>
