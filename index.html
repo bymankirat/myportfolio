@@ -406,7 +406,11 @@ dialog[open]{animation:pop .28s cubic-bezier(.2,.9,.3,1.15)}
 #say span{display:block}
 #say.pop span{animation:saypop .5s cubic-bezier(.2,.8,.2,1.2)}
 @keyframes saypop{from{opacity:0;transform:translateY(5px)}}
-@media (max-width:820px){#say{left:52%;max-width:220px;font-size:16px}}
+#say{transform:translate(var(--dx,0px),-100%)}
+@media (max-width:820px){#say{left:40%;max-width:min(230px,70vw);font-size:16px}}
+/* phone: the moving picture always keeps its space; long text is trimmed instead */
+@media (max-width:820px){.card .cvw{flex:1 1 auto;min-height:clamp(120px,19svh,190px)}.card .cbody{flex:none;padding:12px 6px 4px}.card h3{font-size:18px}
+  .card .csum{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;font-size:14px;margin-bottom:8px}.card .tags{display:none}.card .clinks{margin-bottom:2px}}
 @media (prefers-reduced-motion:reduce){#say.pop span{animation:none}}
 /* ===== terminal ===== */
 .term{margin-top:clamp(40px,6vh,70px);text-shadow:none;max-width:900px}
@@ -1782,6 +1786,11 @@ function update(){const z=cur();if(z!==zone){zone=z;say(TIPS[z]||TIPS.top)}}
 let raf=0;addEventListener("scroll",()=>{if(!raf)raf=requestAnimationFrame(()=>{raf=0;update()})},{passive:true});
 update();
 })();
+/* keep the bubble inside the screen, wherever the avatar walks to */
+(function(){const b=document.getElementById("say"),m=document.getElementById("mascot");if(!b||!m)return;let dx=0;
+function fit(){requestAnimationFrame(fit);if(document.hidden)return;const r=b.getBoundingClientRect();if(!r.width)return;const s=r.width/(b.offsetWidth||1)||1,pad=10,base=r.left-dx*s;
+  let need=0;if(base<pad)need=pad-base;else if(base+r.width>innerWidth-pad)need=innerWidth-pad-r.width-base;const nd=Math.round(need/s);if(Math.abs(nd-dx)>=1){dx=nd;b.style.setProperty("--dx",dx+"px")}}
+requestAnimationFrame(fit)})();
 
 </script>
 </body>
