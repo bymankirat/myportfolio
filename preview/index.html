@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta name="robots" content="noindex">
-<script>(function(){var V=19;if(location.protocol.indexOf("http")!==0)return;try{fetch("version.json?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.json():null}).then(function(j){if(!j||!(j.v>V))return;var k="mk-reload-"+j.v;try{if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,"1")}catch(e){}location.replace(location.pathname+"?v="+j.v+location.hash)}).catch(function(){})}catch(e){}})();</script>
+<script>(function(){var V=20;if(location.protocol.indexOf("http")!==0)return;try{fetch("version.json?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.json():null}).then(function(j){if(!j||!(j.v>V))return;var k="mk-reload-"+j.v;try{if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,"1")}catch(e){}location.replace(location.pathname+"?v="+j.v+location.hash)}).catch(function(){})}catch(e){}})();</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Mankirat Singh | Bioinformatics &amp; Data Science</title>
@@ -532,7 +532,7 @@ dialog[open]{animation:pop .28s cubic-bezier(.2,.9,.3,1.15)}
         <li><b>3</b><span>degrees, from life sciences to bioinformatics</span></li>
         <li><b>21</b><span>research and data science projects</span></li>
         <li><b>4</b><span>labs and R&amp;D teams in India and Spain</span></li>
-        <li><b>24</b><span>people profiled in my thesis: 16 surgery patients before and after, plus 8 lean controls</span></li>
+        <li><b>2</b><span>omics layers integrated in my thesis: microbiome and metabolome</span></li>
         <li><b>34%</b><span>more accurate electricity forecasts than the industry benchmark</span></li>
         <li><b>3,420</b><span>Irish communities analysed from Census 2022</span></li>
         <li><b>178</b><span>Cork and Dublin substations tested against 2040 demand</span></li>
@@ -578,11 +578,10 @@ dialog[open]{animation:pop .28s cubic-bezier(.2,.9,.3,1.15)}
           <div class="org">IBIMA Plataforma BIONAND, Málaga, Spain</div>
           <p class="sum">How do gut microbes and faecal metabolites change after bariatric surgery, and do they change together?</p>
           <ul>
-            <li><b>Hypothesis:</b> surgery reshapes the gut microbiota and faecal metabolome in a coordinated way that contributes to the metabolic improvements patients see, and Roux-en-Y gastric bypass (RYGB) and sleeve gastrectomy (SG) may drive different adaptations</li>
-            <li><b>Microbiome:</b> raw Ion Torrent 16S rRNA reads from 16 patients (8 sleeve gastrectomy, 8 gastric bypass) before and 3 months after surgery, plus 8 healthy lean controls, processed in QIIME2 (DADA2, SILVA) into taxonomic profiles</li>
+            <li><b>Microbiome:</b> raw Ion Torrent 16S rRNA reads processed in QIIME2 (DADA2, SILVA) into taxonomic profiles</li>
             <li><b>Metabolomics:</b> exploratory analysis of faecal metabolomics to find metabolites linked to surgery</li>
             <li><b>Comparisons:</b> before vs after surgery, RYGB vs SG, and patients with obesity vs a healthy lean reference cohort</li>
-            <li><b>Integration:</b> linking taxa and metabolites with mixOmics (sPLS, DIABLO). A group of 26 taxa tracked larger drops in fasting glucose (ρ = −0.83), and no procedure-specific signature survived cross-validation</li>
+            <li><b>Integration:</b> linking taxa and metabolites with mixOmics (sPLS, DIABLO)</li>
           </ul>
           <div class="tl-tools"><span>QIIME2</span><span>R</span><span>mixOmics</span><span>16S rRNA</span><span>Metabolomics</span></div>
         </li>
@@ -655,7 +654,7 @@ dialog[open]{animation:pop .28s cubic-bezier(.2,.9,.3,1.15)}
           <div class="org">University College Cork</div>
           <p>My current degree, focused on the computational side of biology: analysing large sequencing and omics datasets with Python and R.</p>
           <ul><li><strong>Thesis</strong>, hosted at IBIMA Plataforma BIONAND in Málaga, Spain: a multi-omics study of how gut microbes and faecal metabolites change after Roux-en-Y gastric bypass and sleeve gastrectomy, with healthy lean controls as a reference</li>
-          <li>Raw Ion Torrent 16S rRNA reads processed in QIIME2 and integrated with faecal metabolomics in mixOmics. Using each patient as their own control made the surgery effect on the microbiome visible (p = 0.036 paired, against 0.378 unpaired)</li></ul>
+          <li>Raw Ion Torrent 16S rRNA reads processed in QIIME2 and integrated with faecal metabolomics in mixOmics</li></ul>
           <ol class="ms" aria-label="Progress">
             <li class="done"><b>Modules</b>Taught year complete</li>
             <li class="done"><b>Thesis</b>Defended Oct 2026</li>
@@ -950,7 +949,7 @@ tick(); setInterval(tick,1000);
 const P = [
   {k:"stack",when:"May to Oct 2026",t:"Gut microbes after bariatric surgery",org:"MSc thesis, IBIMA Plataforma BIONAND, Málaga",tags:["QIIME2","mixOmics","R","16S rRNA","Metabolomics","RYGB vs SG"],
   sum:"Linking gut bacteria to faecal metabolites before and after RYGB and sleeve gastrectomy, against a healthy lean reference.",
-  text:"<h4>Working hypothesis</h4><p>Bariatric surgery induces changes in gut microbiota composition and faecal metabolomic profiles that contribute to the metabolic improvements observed after surgery. These microbial and metabolic adaptations may occur in a coordinated way and can be explored through an integrated analysis of microbiota and metabolomics data. Different procedures, Roux-en-Y gastric bypass (RYGB) and sleeve gastrectomy (SG), may also promote distinct biological adaptations.</p><h4>Aim</h4><p>To characterise changes in gut microbiota and faecal metabolomic profiles after bariatric surgery, and to explore associations between the two omics layers through an integrated multi-omics approach.</p><h4>Objectives</h4><ol><li>Process raw 16S rRNA gene sequencing data in QIIME2 and generate high-quality taxonomic profiles for downstream analysis.</li><li>Analyse the pre-processed faecal metabolomics data, focusing on exploratory analyses and identifying metabolites associated with bariatric surgery.</li><li>Characterise changes in gut microbiota composition before and after surgery in patients undergoing RYGB and SG.</li><li>Characterise changes in faecal metabolomic profiles before and after surgery in patients undergoing RYGB and SG.</li><li>Compare the microbial and metabolomic profiles of patients with obesity against a reference cohort of healthy lean controls.</li><li>Explore associations between microbial taxa and metabolites with integrative analyses, and identify potential microbiota–metabolite signatures of bariatric surgery.</li><li>Generate biological hypotheses about the microbial and metabolic adaptations induced by bariatric surgery.</li></ol><h4>What I found</h4><ul><li>16 patients (8 RYGB and 8 SG) compared before and 3 months after surgery, with 8 healthy lean controls as a reference</li><li>Ion Torrent 16S rRNA reads processed with custom QIIME2 pipelines. 16S sequencing reads a marker gene every bacterium carries, showing who is in a sample and in what proportions.</li><li>Faecal metabolomics integrated with the microbiome data in mixOmics, an R package for analysing several omics datasets measured on the same people</li><li>The surgery effect on the microbiome was significant with within-patient (paired) change (p = 0.036) but hidden in an unpaired test (p = 0.378). A group of 26 taxa tracked larger drops in fasting glucose (ρ = −0.83), and no procedure-specific signature survived cross-validation</li></ul>"},
+  text:"<h4>Aim</h4><p>To characterise changes in gut microbiota and faecal metabolomic profiles after bariatric surgery, and to explore associations between the two omics layers through an integrated multi-omics approach.</p><h4>How I did it</h4><ul><li>A longitudinal design: patients compared before and after surgery, with healthy lean controls as a reference</li><li>Ion Torrent 16S rRNA reads processed with custom QIIME2 pipelines. 16S sequencing reads a marker gene every bacterium carries, showing who is in a sample and in what proportions.</li><li>Faecal metabolomics analysed in R and integrated with the microbiome data in mixOmics (sPLS, DIABLO), an R package for analysing several omics datasets measured on the same people</li></ul><p>The results are not yet published, so I am not sharing them here.</p>"},
 
  {k:"trials",L:[["Live report", "https://bymankirat.github.io/clinical-trial-risk/"], ["Code", "https://github.com/bymankirat/clinical-trial-risk"]],when:"Oct 2026",t:"Why clinical trials stop early",org:"Independent project in Python, ClinicalTrials.gov API",tags:["Python","scikit-learn","Clinical trials","Gradient boosting","Interactive report","40,124 trials"],
   sum:"Analyses 40,124 Phase 2/3 trials to find why 1 in 6 stop early, and flags risky trials at the design stage.",
@@ -1716,7 +1715,7 @@ const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",
 const name="MANKIRAT SINGH",dna=[...name].filter(c=>c!==" ").map(c=>{const v=c.charCodeAt(0);return[6,4,2,0].map(s=>"ACGT"[(v>>s)&3]).join("")}).join(" ");
 const FACTS=["My first lab instrument was a manual rotary microtome, cutting rat tissue for H&E staining.","I've analysed 40,124 clinical trials to see why 1 in 6 stop early.",
   "I'm a GRSS roller-skating champion.","My photography has been featured on Photo Vogue.","I followed a banana DNA-damage gene I cloned at NABI across 17 plant genomes.",
-  "I speak English, Hindi and Punjabi.","My thesis profiled 24 people: 16 surgery patients before and after, plus 8 lean controls.","My Irish electricity forecast is 34% more accurate than the industry benchmark."];
+  "I speak English, Hindi and Punjabi.","My Irish electricity forecast is 34% more accurate than the industry benchmark."];
 let fi=Math.floor(Math.random()*FACTS.length);
 const titles=()=>typeof P!=="undefined"?P.map((p,i)=>`<span class="t-n">${String(i+1).padStart(2," ")}</span> ${esc(p.t)}`).join("\n"):"";
 const C={
@@ -1742,9 +1741,9 @@ I work end to end: from the bench that makes the data to the code, models and ma
   education:()=>`2025–26  MSc Bioinformatics and Computational Biology, University College Cork
 2024–25  PG Diploma in Bioinformatics, St. Xavier's College, Mumbai (CGPA 8.5)
 2020–23  BSc Life Sciences, University of Delhi (First Division)`,
-  thesis:()=>`At IBIMA Plataforma BIONAND in Málaga I linked gut microbes and faecal metabolites in 16 bariatric-surgery patients,
-before and 3 months after surgery, against 8 lean controls (QIIME2, mixOmics). Using each patient as their own control
-made the surgery effect visible (p = 0.036 paired vs 0.378 unpaired), and 26 taxa tracked larger drops in fasting glucose.`,
+  thesis:()=>`At IBIMA Plataforma BIONAND in Málaga I studied how gut microbes and faecal metabolites change after bariatric surgery,
+comparing patients before and after surgery with healthy lean controls. I built the pipeline end to end: Ion Torrent 16S rRNA
+reads in QIIME2, faecal metabolomics in R, and integration of both in mixOmics (sPLS, DIABLO).`,
   dna:()=>`${name}  →  <span class="t-dna">${dna}</span>\n52 bp · each letter's 8 bits become 4 bases (00 = A, 01 = C, 10 = G, 11 = T)`,
   fact:()=>{fi=(fi+1)%FACTS.length;return FACTS[fi]},
   contact:()=>`Email     <a href="mailto:msmankiratsingh@gmail.com">msmankiratsingh@gmail.com</a>
