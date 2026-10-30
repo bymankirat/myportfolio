@@ -402,6 +402,33 @@ dialog[open]{animation:pop .28s cubic-bezier(.2,.9,.3,1.15)}
   .jr-cap b{font-size:15px}.jr-cap span:not(.k){font-size:13px}
   .jr-steps{justify-content:flex-start;margin-top:6px}
 }
+/* ===== the avatar's speech bubble ===== */
+#say{position:fixed;left:0;top:0;z-index:4;max-width:230px;font:inherit;font-size:13.5px;font-weight:600;line-height:1.35;text-align:left;color:#1C211B;background:#F4F5EF;border:1px solid rgba(28,33,27,.15);border-radius:16px 16px 16px 4px;padding:9px 12px;box-shadow:0 10px 26px -10px rgba(0,0,0,.35);cursor:pointer;opacity:0;pointer-events:none;transition:opacity .35s;will-change:transform}
+#say.on{opacity:1;pointer-events:auto}
+#say.pop span{display:inline-block;animation:saypop .45s cubic-bezier(.2,.8,.2,1.3)}
+@keyframes saypop{from{opacity:0;transform:translateY(6px) scale(.9)}}
+#say::after{content:"tap for a fact";display:block;margin-top:3px;font-size:10.5px;font-weight:500;color:#6B6F63;letter-spacing:.02em}
+@media (max-width:820px){#say{max-width:180px;font-size:12.5px}}
+/* ===== terminal ===== */
+.term{margin-top:clamp(40px,6vh,70px);text-shadow:none;max-width:900px}
+.term-h{font-family:var(--hand);font-weight:400;font-size:clamp(30px,3.4vw,44px);margin:0 0 14px}
+.t-win{border-radius:18px;overflow:hidden;background:#161914;border:1px solid rgba(236,237,230,.12);box-shadow:0 24px 60px -30px rgba(0,0,0,.6)}
+.t-bar{display:flex;align-items:center;gap:7px;padding:10px 14px;background:#22261F;color:#9AA391;font:500 12px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.t-bar i{width:11px;height:11px;border-radius:50%;background:#D9718E}.t-bar i:nth-child(2){background:#E8C46B}.t-bar i:nth-child(3){background:#A4AF98}
+.t-bar span{margin-left:8px}
+.t-screen{padding:14px 16px 12px;font:13.5px/1.55 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:#DDE3D2;cursor:text}
+.t-out{max-height:300px;overflow:auto;white-space:pre-wrap;overscroll-behavior:contain}
+.t-blk{margin-bottom:10px}
+.t-p{color:#A4AF98;margin-right:8px;white-space:nowrap}
+.t-cmd{color:#F4F5EF}
+.t-res b{color:#F49AB4;font-weight:700}.t-res a{color:#BDB3F0}.t-n{color:#6E7766}.t-ok{color:#9FD3A6}.t-dna{color:#E8C46B;letter-spacing:.05em}
+.t-in{display:flex;align-items:center;border-top:1px dashed rgba(236,237,230,.14);padding-top:10px}
+.t-in input{flex:1;min-width:0;background:transparent;border:0;outline:0;color:#F4F5EF;font:inherit;caret-color:#D9718E}
+.t-in input::placeholder{color:#5F6858}
+.t-chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
+.t-chips button{font:500 13px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;padding:6px 12px;border-radius:999px;border:1px solid var(--rail-line);background:var(--rail);color:var(--ink);cursor:pointer;transition:border-color .2s,transform .2s}
+.t-chips button:hover{border-color:var(--ink);transform:translateY(-1px)}
+@media (max-width:600px){.t-screen{font-size:12.5px}.t-out{max-height:260px}}
 /* ===== my name in DNA ===== */
 .namedna{margin:28px 0;padding:20px 22px;border:1px solid var(--rail-line);border-radius:22px;background:var(--rail);text-shadow:none;max-width:760px}
 .namedna h3{margin:0 0 4px;font-family:var(--serif);font-style:italic;font-weight:400;font-size:26px}
@@ -460,6 +487,7 @@ dialog[open]{animation:pop .28s cubic-bezier(.2,.9,.3,1.15)}
 <canvas id="net" aria-hidden="true"></canvas>
 <div id="net-fx" aria-hidden="true"></div>
 <canvas id="gl" aria-hidden="true"></canvas>
+<button type="button" id="say" aria-label="A message from Mankirat; click for a fun fact"><span></span></button>
 <canvas id="bugs" aria-hidden="true"></canvas>
 <div id="dim" aria-hidden="true"></div>
 
@@ -696,6 +724,15 @@ dialog[open]{animation:pop .28s cubic-bezier(.2,.9,.3,1.15)}
         <p><strong>Service.</strong> Volunteer with the EHSAAS Foundation, and a former NCC cadet.</p>
       </div>
     </div>
+      <div class="term" id="term">
+        <h3 class="term-h">Or ask my terminal</h3>
+        <div class="t-win">
+          <div class="t-bar"><i></i><i></i><i></i><span>mankirat@cork: ~</span></div>
+          <div class="t-screen"><div class="t-out" aria-live="polite"></div>
+            <form class="t-in" autocomplete="off"><label for="tIn" class="t-p">mankirat@cork:~$</label><input id="tIn" type="text" spellcheck="false" autocapitalize="off" placeholder="type help and press Enter"></form></div>
+        </div>
+        <div class="t-chips" role="group" aria-label="Try a command"><button type="button" data-c="help">help</button><button type="button" data-c="whoami">whoami</button><button type="button" data-c="projects">projects</button><button type="button" data-c="skills">skills</button><button type="button" data-c="thesis">thesis</button><button type="button" data-c="dna">dna</button><button type="button" data-c="fact">fact</button><button type="button" data-c="sudo hire mankirat">sudo hire mankirat</button></div>
+      </div>
   </section>
 
   <section class="contact" id="contact">
@@ -855,8 +892,9 @@ window.SoftRenderer=function(cv){
   this.domElement=cv;
   this.setPixelRatio=p=>{dpr=1};
   const SPR={};const sprite=(col,em)=>{const k=col.getHexString()+(em?'e':'');if(SPR[k])return SPR[k];const c2=document.createElement('canvas');c2.width=c2.height=64;const g2=c2.getContext('2d');
-    const gr=g2.createRadialGradient(22,20,4,32,32,31);gr.addColorStop(0,mix(col,.6+(em?.15:0),1));gr.addColorStop(.6,mix(col,0,1));gr.addColorStop(1,mix(col,.32,0));g2.fillStyle=gr;g2.beginPath();g2.arc(32,32,31,0,7);g2.fill();return SPR[k]=c2};
+    const gr=g2.createRadialGradient(22,19,2,32,32,31);gr.addColorStop(0,'#ffffff');gr.addColorStop(.18,mix(col,.75,1));gr.addColorStop(.62,mix(col,0,1));gr.addColorStop(.9,tint(col,.38));gr.addColorStop(1,tint(col,.5));g2.fillStyle=gr;g2.beginPath();g2.arc(32,32,31,0,7);g2.fill();return SPR[k]=c2};
   this.setSize=(w,h)=>{W=w;H=h;cv.width=Math.round(w*dpr);cv.height=Math.round(h*dpr);cv.style.width=w+"px";cv.style.height=h+"px"};
+  const tint=(col,t)=>{const r=col.r+(.45-col.r)*t,g=col.g+(.36-col.g)*t,bb=col.b+(.6-col.b)*t;return`rgb(${r*255|0},${g*255|0},${bb*255|0})`};
   const mix=(col,t,to)=>{const r=col.r+(to-col.r)*t,g=col.g+(to-col.g)*t,bb=col.b+(to-col.b)*t;return`rgb(${r*255|0},${g*255|0},${bb*255|0})`};
   this.render=(scene,cam)=>{const now=performance.now();if(now-last<38)return;last=now;
     scene.updateMatrixWorld();cam.updateMatrixWorld();const vi=cam.matrixWorldInverse,f=H/(2*Math.tan(cam.fov*Math.PI/360)),items=[];
@@ -869,11 +907,14 @@ window.SoftRenderer=function(cv){
           x.drawImage(sprite(col,!!(m.emissive&&m.emissiveIntensity)),p.X-r,p.Y-r,2*r,2*r)}x.globalAlpha=1}})}
       else if(t==="CylinderGeometry"){const h=g.parameters.height/2,p=S(a.set(0,-h,0).applyMatrix4(o.matrixWorld)),q=S(b.set(0,h,0).applyMatrix4(o.matrixWorld),{});if(!p||!q||(off(p)&&off(q)))return;
         const e=o.matrixWorld.elements,sx=Math.hypot(e[0],e[1],e[2]),w=Math.max(1,2*g.parameters.radiusTop*sx*(p.k+q.k)/2),c1=mix(col,0,1),hl=mix(col,.45,1);
-        items.push({z:(p.z+q.z)/2,f:()=>{x.globalAlpha=op;x.lineCap="round";x.strokeStyle=c1;x.lineWidth=w;x.beginPath();x.moveTo(p.X,p.Y);x.lineTo(q.X,q.Y);x.stroke();
-          x.strokeStyle=hl;x.lineWidth=w*.34;x.beginPath();x.moveTo(p.X-w*.12,p.Y-w*.16);x.lineTo(q.X-w*.12,q.Y-w*.16);x.stroke();x.globalAlpha=1}})}
-      else if(t==="TubeGeometry"){const path=g.parameters.path,n=260,rad=g.parameters.radius*sc,c1=mix(col,.1,1);let prev=S(a.copy(path.getPointAt(0)).applyMatrix4(o.matrixWorld),{});
+        const sh=tint(col,.35);items.push({z:(p.z+q.z)/2,f:()=>{x.globalAlpha=op;x.lineCap="round";x.strokeStyle=sh;x.lineWidth=w;x.beginPath();x.moveTo(p.X,p.Y);x.lineTo(q.X,q.Y);x.stroke();
+          x.strokeStyle=c1;x.lineWidth=w*.72;x.beginPath();x.moveTo(p.X-w*.06,p.Y-w*.08);x.lineTo(q.X-w*.06,q.Y-w*.08);x.stroke();
+          x.strokeStyle=hl;x.lineWidth=w*.28;x.beginPath();x.moveTo(p.X-w*.16,p.Y-w*.2);x.lineTo(q.X-w*.16,q.Y-w*.2);x.stroke();x.globalAlpha=1}})}
+      else if(t==="TubeGeometry"){const path=g.parameters.path,n=260,rad=g.parameters.radius*sc,c1=mix(col,.25,1),sh=tint(col,.3),hi=mix(col,.85,1);let prev=S(a.copy(path.getPointAt(0)).applyMatrix4(o.matrixWorld),{});
         for(let i=1;i<=n;i++){const cur=S(a.copy(path.getPointAt(i/n)).applyMatrix4(o.matrixWorld),{}),p0=prev;prev=cur;if(!p0||!cur||(off(p0)&&off(cur)))continue;const w=Math.max(1,2*rad*(p0.k+cur.k)/2);
-          items.push({z:(p0.z+cur.z)/2+.02,f:()=>{x.lineCap="round";x.strokeStyle=c1;x.lineWidth=w;x.beginPath();x.moveTo(p0.X,p0.Y);x.lineTo(cur.X,cur.Y);x.stroke()}})}}
+          items.push({z:(p0.z+cur.z)/2+.02,f:()=>{x.lineCap="round";x.strokeStyle=sh;x.lineWidth=w;x.beginPath();x.moveTo(p0.X,p0.Y);x.lineTo(cur.X,cur.Y);x.stroke();
+            x.strokeStyle=c1;x.lineWidth=w*.7;x.beginPath();x.moveTo(p0.X-w*.08,p0.Y-w*.1);x.lineTo(cur.X-w*.08,cur.Y-w*.1);x.stroke();
+            x.strokeStyle=hi;x.lineWidth=w*.25;x.beginPath();x.moveTo(p0.X-w*.15,p0.Y-w*.2);x.lineTo(cur.X-w*.15,cur.Y-w*.2);x.stroke()}})}}
       else if(t==="TorusGeometry"){const R=g.parameters.radius,pts=[];for(let i=0;i<=72;i++){const an=i/72*Math.PI*2;const p=S(a.set(Math.cos(an)*R,Math.sin(an)*R,0).applyMatrix4(o.matrixWorld),{});if(p)pts.push(p)}
         const z=pts.reduce((s,p)=>s+p.z,0)/Math.max(1,pts.length);items.push({z,f:()=>{x.globalAlpha=op;x.strokeStyle=mix(col,0,1);x.lineWidth=1.2;x.beginPath();pts.forEach((p,i)=>i?x.lineTo(p.X,p.Y):x.moveTo(p.X,p.Y));x.stroke();x.globalAlpha=1}})}
       else if(t==="RingGeometry"){const p=S(a.setFromMatrixPosition(o.matrixWorld));if(!p)return;const r=g.parameters.outerRadius*sc*p.k;items.push({z:p.z-.01,f:()=>{x.globalAlpha=op;x.strokeStyle=mix(col,0,1);x.lineWidth=1.4;x.beginPath();x.arc(p.X,p.Y,r,0,7);x.stroke();x.globalAlpha=1}})}
@@ -1265,7 +1306,7 @@ if(window.Lenis&&!reduce){try{const lenis=new Lenis({lerp:.085,smoothWheel:true,
       x.beginPath();x.ellipse(0,r*1.25,r*.8,r*.25,0,0,7);x.strokeStyle=c+"60";x.lineWidth=1;x.stroke();break}
     case "wave":{for(let k=0;k<2;k++){x.beginPath();for(let i=0;i<=40;i++){const u=i/40;x.lineTo(-o.L/2+u*o.L,k*8+Math.sin(u*Math.PI*3+time*1.5+o.ph+k)*o.amp)}x.strokeStyle=c+(k?"70":"D0");x.lineWidth=2;x.lineCap="round";x.stroke()}break}
     }}
-  const TXT=".deg-path,.jr-globe,.namedna,.wk-filters,.hero-meta .who,.hero-meta .where,.year-tag,.hero-title,.about .lead,.about-inner>p,.ds-row>div,.about .links,.labs,.rail .hand-h,.rail-sub,.tl>li,.edu-card,.edu-certs,.contact .hand-big,.contact p,.contact .mail,.contact .links,.foot,.works-head>*,.works .card,.toolkit .hand-h,.tk-grid>div,.two>div,.facts li,.fit div";
+  const TXT=".deg-path,.jr-globe,.namedna,.wk-filters,.term,.hero-meta .who,.hero-meta .where,.year-tag,.hero-title,.about .lead,.about-inner>p,.ds-row>div,.about .links,.labs,.rail .hand-h,.rail-sub,.tl>li,.edu-card,.edu-certs,.contact .hand-big,.contact p,.contact .mail,.contact .links,.foot,.works-head>*,.works .card,.toolkit .hand-h,.tk-grid>div,.two>div,.facts li,.fit div";
   let rects=[],rT=0;
   function readRects(){rects=[];document.querySelectorAll(TXT).forEach(el=>{const r=el.getBoundingClientRect();
     if(r.bottom>-40&&r.top<H+40&&r.width>0&&getComputedStyle(el).opacity!=="0")rects.push([r.left-34,r.top-26,r.right+34,r.bottom+26])});
@@ -1371,7 +1412,7 @@ addEventListener("resize",resize);resize();
 const zones=[["top",{x:0,z:12,s:1.12}],["about",{x:0,z:15,s:.9}],["resume",{x:-1,z:9.5,s:1}],["education",{x:-1,z:10.5,s:1}],["toolkit",{x:0,z:14,s:.62}],["contact",{x:.35,z:14,s:.85}]];
 const els=zones.map(([id])=>document.getElementById(id));
 let cur={x:0,z:13,s:1,y:0,rz:.34,g:0,gx:.735,gy:.25,gr:118},visible=true,workFlat=false,laneOn=false,laneSince=0;
-const GTXT=".deg-path,.jr-globe,.namedna,.wk-filters,.hero-meta .who,.hero-meta .where,.year-tag,.hero-title,.about .lead,.about-inner>p,.ds-row>div,.about .links,.labs,.rail .hand-h,.rail-sub,.tl>li,.edu-card,.edu-certs,.contact .hand-big,.contact p,.contact .mail,.contact .links,.foot,.works-head>*,.works .card,.toolkit .hand-h,.tk-grid>div,.two>div,.facts li,.fit div,#mascot";
+const GTXT=".deg-path,.jr-globe,.namedna,.wk-filters,.term,.hero-meta .who,.hero-meta .where,.year-tag,.hero-title,.about .lead,.about-inner>p,.ds-row>div,.about .links,.labs,.rail .hand-h,.rail-sub,.tl>li,.edu-card,.edu-certs,.contact .hand-big,.contact p,.contact .mail,.contact .links,.foot,.works-head>*,.works .card,.toolkit .hand-h,.tk-grid>div,.two>div,.facts li,.fit div,#mascot";
 const GTIGHT=".year-tag,.hero-title,.hand-h,.hand-big,.hero-meta .who,.hero-meta .where,.rail-sub",gRange=document.createRange();
 let gSpot=null,gT=0;
 function freeSpot(sel){const W=innerWidth,H=innerHeight,wide=W>820,soft=!!sel,want=wide?Math.min(240,H*.3):soft?Math.min(165,W*.42):Math.min(100,W*.26),min=wide?82:46,pad=wide?12:8;
@@ -1657,6 +1698,84 @@ function start(){if(!window.__nogl)return;
     if(hero<1){const a=1-hero,R=Math.min(W,H)*(wide?.06:.07);helix(W/2,H*(wide?.88:.9),0,W*1.1,R,t,a*.85);if(wide)globe(W*.9,H*.17,Math.min(W,H)*.075,t,a*.85)}}
   requestAnimationFrame(frame)}
 if(document.readyState==="loading")addEventListener("DOMContentLoaded",start);else setTimeout(start,0);
+})();
+
+</script>
+<script>
+/* "Ask my terminal": type a command (or tap one) to explore the portfolio. */
+(function(){
+const box=document.getElementById("term");if(!box)return;const out=box.querySelector(".t-out"),inp=box.querySelector(".t-in input"),chips=box.querySelector(".t-chips");
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const name="MANKIRAT SINGH",dna=[...name].filter(c=>c!==" ").map(c=>{const v=c.charCodeAt(0);return[6,4,2,0].map(s=>"ACGT"[(v>>s)&3]).join("")}).join(" ");
+const FACTS=["My first lab instrument was a manual rotary microtome, cutting rat tissue for H&E staining.","I've analysed 40,124 clinical trials to see why 1 in 6 stop early.",
+  "I'm a GRSS roller-skating champion.","My photography has been featured on Photo Vogue.","I followed a banana DNA-damage gene I cloned at NABI across 17 plant genomes.",
+  "I speak English, Hindi and Punjabi.","My thesis profiled 24 people: 16 surgery patients before and after, plus 8 lean controls.","My Irish electricity forecast is 34% more accurate than the industry benchmark."];
+let fi=Math.floor(Math.random()*FACTS.length);
+const titles=()=>typeof P!=="undefined"?P.map((p,i)=>`<span class="t-n">${String(i+1).padStart(2," ")}</span> ${esc(p.t)}`).join("\n"):"";
+const C={
+  help:()=>`Commands you can try:
+  <b>whoami</b>      who I am
+  <b>projects</b>    list my 21 projects   ·  <b>open 1</b> opens one
+  <b>skills</b>      tools and lab techniques
+  <b>education</b>   my three degrees
+  <b>thesis</b>      my MSc thesis in one paragraph
+  <b>dna</b>         my name written in DNA
+  <b>fact</b>        a random fact about me
+  <b>contact</b>     how to reach me
+  <b>cv</b>          download my CV
+  <b>clear</b>       clear the screen`,
+  whoami:()=>`Mankirat Singh, bioinformatician and data scientist in Cork, Ireland.
+MSc Bioinformatics and Computational Biology, University College Cork (thesis defended Oct 2026, results Nov 2026).
+I work end to end: from the bench that makes the data to the code, models and maps that explain it.`,
+  projects:()=>titles()+`\n\nType <b>open</b> and a number, for example <b>open 1</b>.`,
+  skills:()=>`<b>Data</b>      Python, pandas, scikit-learn, R, limma, WGCNA, SQL, Power BI (DAX)
+<b>Omics</b>     QIIME2, mixOmics, MetaboAnalyst, GSEA, PyMOL, Chimera, HMMER, IQ-TREE
+<b>Wet lab</b>   NGS, PCR, qPCR, Western blot, ovariectomy, behavioural phenotyping
+<b>Histology</b> microtomy, H&amp;E staining, Agrobacterium transformation`,
+  education:()=>`2025–26  MSc Bioinformatics and Computational Biology, University College Cork
+2024–25  PG Diploma in Bioinformatics, St. Xavier's College, Mumbai (CGPA 8.5)
+2020–23  BSc Life Sciences, University of Delhi (First Division)`,
+  thesis:()=>`At IBIMA Plataforma BIONAND in Málaga I linked gut microbes and faecal metabolites in 16 bariatric-surgery patients,
+before and 3 months after surgery, against 8 lean controls (QIIME2, mixOmics). Using each patient as their own control
+made the surgery effect visible (p = 0.036 paired vs 0.378 unpaired), and 26 taxa tracked larger drops in fasting glucose.`,
+  dna:()=>`${name}  →  <span class="t-dna">${dna}</span>\n52 bp · each letter's 8 bits become 4 bases (00 = A, 01 = C, 10 = G, 11 = T)`,
+  fact:()=>{fi=(fi+1)%FACTS.length;return FACTS[fi]},
+  contact:()=>`Email     <a href="mailto:msmankiratsingh@gmail.com">msmankiratsingh@gmail.com</a>
+LinkedIn  <a href="https://linkedin.com/in/mankirat-singh-694440177" target="_blank" rel="noopener">linkedin.com/in/mankirat-singh-694440177</a>
+GitHub    <a href="https://github.com/bymankirat" target="_blank" rel="noopener">github.com/bymankirat</a>`,
+  cv:()=>`<a href="Mankirat_Singh_CV.pdf" target="_blank" rel="noopener">Mankirat_Singh_CV.pdf ↗</a>`,
+  ls:()=>`projects/   thesis/   cv.pdf   dna.txt   facts.txt`,
+  hire:()=>`Checking permissions… <span class="t-ok">granted ✓</span>
+Great choice. Write to <a href="mailto:msmankiratsingh@gmail.com?subject=Opportunity%20for%20Mankirat%20Singh">msmankiratsingh@gmail.com</a> and I'll reply quickly.`,
+  hello:()=>`Hello! Sat sri akal! Namaste! Type <b>help</b> to see what I can do.`
+};
+C.hi=C.hello;C.sudo=C.hire;C.about=C.whoami;C["cat"]=a=>a.includes("dna")?C.dna():a.includes("fact")?C.fact():a.includes("cv")?C.cv():a.includes("thesis")?C.thesis():`cat: ${esc(a)}: try <b>ls</b>`;
+function print(cmd,html){const d=document.createElement("div");d.className="t-blk";d.innerHTML=(cmd!==null?`<div class="t-cmd"><span class="t-p">mankirat@cork:~$</span> ${esc(cmd)}</div>`:"")+`<div class="t-res">${html}</div>`;out.appendChild(d);out.scrollTop=out.scrollHeight}
+function run(raw){const s=raw.trim();if(!s)return;const [c0,...rest]=s.split(/\s+/),c=c0.toLowerCase(),arg=rest.join(" ");
+  if(c==="clear"){out.innerHTML="";return}
+  if(c==="open"){const n=parseInt(arg,10);if(typeof P!=="undefined"&&n>=1&&n<=P.length&&typeof openP==="function"){print(s,`Opening <b>${esc(P[n-1].t)}</b>…`);setTimeout(()=>openP(n-1),300)}else print(s,`Usage: <b>open 1</b> to <b>open ${typeof P!=="undefined"?P.length:21}</b>. Type <b>projects</b> for the list.`);return}
+  const f=C[c];print(s,f?f(arg):`command not found: ${esc(c)}. Type <b>help</b>.`)}
+box.querySelector(".t-in").addEventListener("submit",e=>{e.preventDefault();run(inp.value);hist.unshift(inp.value);hp=-1;inp.value=""});
+const hist=[];let hp=-1;inp.addEventListener("keydown",e=>{if(e.key==="ArrowUp"&&hist.length){hp=Math.min(hist.length-1,hp+1);inp.value=hist[hp];e.preventDefault()}else if(e.key==="ArrowDown"){hp=Math.max(-1,hp-1);inp.value=hp<0?"":hist[hp];e.preventDefault()}});
+chips.addEventListener("click",e=>{const b=e.target.closest("button");if(b)run(b.dataset.c)});
+box.querySelector(".t-screen").addEventListener("click",e=>{if(!e.target.closest("a")&&!getSelection().toString())inp.focus({preventScroll:true})});
+print(null,`Welcome! This terminal knows about my work. Type <b>help</b>, or tap a command below.`);
+})();
+
+/* The avatar talks: a small speech bubble by his head with a tip for each section. Click it for a fun fact. */
+(function(){
+const mas=document.getElementById("mascot"),b=document.getElementById("say");if(!mas||!b)return;const txt=b.querySelector("span");
+const TIPS={top:"Hi, I'm Mankirat. Move your cursor, I'm watching.",about:"From the bench to the code: I do both.",work:"Hover a picture to replay it, or try the filters.",
+  toolkit:"Try my terminal below. Type help.",contact:"Say hello! I reply quickly."};
+const FACTS=["I've analysed 40,124 clinical trials.","GRSS roller-skating champion, by the way.","My photos have been on Photo Vogue.","Sat sri akal! Namaste! Hello!","I once cut rat tissue on a manual microtome.","My forecast beats the benchmark by 34%."];
+let zone="",fact=-1,shown="",tm=0;const ids=Object.keys(TIPS).concat(["resume","education"]);
+function cur(){const mid=innerHeight*.5;let best="";for(const id of ids){const el=document.getElementById(id);if(!el)continue;const r=el.getBoundingClientRect();if(r.top<=mid&&r.bottom>=mid)best=id}return best}
+function show(s){if(s===shown)return;shown=s;b.classList.remove("pop");void b.offsetWidth;txt.textContent=s;b.classList.add("pop")}
+function tick(){const z=cur(),op=parseFloat(getComputedStyle(mas).opacity||"1"),r=mas.getBoundingClientRect(),ok=TIPS[z]&&op>.5&&r.width>0&&r.top<innerHeight*.75&&!document.documentElement.classList.contains("dlg-open");
+  b.classList.toggle("on",ok);if(ok){if(z!==zone){zone=z;fact=-1;show(TIPS[z])}
+    const x=Math.min(innerWidth-b.offsetWidth-12,Math.max(12,r.left+r.width*.62)),y=Math.max(70,r.top+r.height*.06-b.offsetHeight);b.style.transform=`translate3d(${x.toFixed(0)}px,${y.toFixed(0)}px,0)`}}
+setInterval(tick,200);addEventListener("scroll",()=>{clearTimeout(tm);tm=setTimeout(tick,60)},{passive:true});
+b.addEventListener("click",()=>{fact=(fact+1)%FACTS.length;show(FACTS[fact])});
 })();
 
 </script>
