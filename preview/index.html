@@ -1567,25 +1567,50 @@ if(window.IntersectionObserver)new IntersectionObserver((es,o)=>{if(es[0].isInte
 
 </script>
 <script>
-/* Fallback DNA for browsers where 3D (WebGL) is switched off: a light 2D double helix on the cover,
-   drawn about 20 times a second, so every visitor still sees the DNA. */
+/* Fallback for browsers with 3D (WebGL) switched off: a shaded 2D double helix and a turning data
+   globe that look like the 3D ones. Drawn about 20 times a second so a computer without graphics
+   acceleration stays smooth. On the cover the helix runs top to bottom with the globe beside it;
+   further down the helix lies along the bottom of the screen and the globe sits in the top corner. */
 (function(){
 function start(){if(!window.__nogl)return;
-  const RM=matchMedia("(prefers-reduced-motion: reduce)").matches,dk=document.documentElement.dataset.theme==="dark"||(document.documentElement.dataset.theme!=="light"&&matchMedia("(prefers-color-scheme: dark)").matches);
+  const RM=matchMedia("(prefers-reduced-motion: reduce)").matches,D=Math.PI/180;
+  const dk=document.documentElement.dataset.theme==="dark"||(document.documentElement.dataset.theme!=="light"&&matchMedia("(prefers-color-scheme: dark)").matches);
   const cv=document.createElement("canvas");cv.id="dna2d";cv.setAttribute("aria-hidden","true");const gl=document.getElementById("gl");gl.parentNode.insertBefore(cv,gl);
   const x=cv.getContext("2d");let W=0,H=0,dpr=1;const size=()=>{W=innerWidth;H=innerHeight;dpr=Math.min(devicePixelRatio||1,1.5);cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr)};size();addEventListener("resize",size);
-  const strand=dk?"#A9B59B":"#F1F2EA",edge=dk?"#5F6B57":"#C9CDBF",pair=[["#D9718E","#9A8FD8"],["#9A8FD8","#D9718E"],["#A4AF98","#ECEDE6"],["#ECEDE6","#A4AF98"]];
+  const BB=dk?["#C3CCB5","#7E8A73"]:["#FFFFFF","#E7DCEB"],BBs=dk?"#6E7A64":"#D9C6DE";
+  const BASE=[["#E8789A","#6A55B8"],["#6A55B8","#E8789A"],["#9DAA90","#F2EDE0"],["#F2EDE0","#9DAA90"]];
+  const ball=(X,Y,r)=>{const g=x.createRadialGradient(X-r*.35,Y-r*.4,r*.15,X,Y,r);g.addColorStop(0,BB[0]);g.addColorStop(1,BB[1]);x.fillStyle=g;x.beginPath();x.arc(X,Y,r,0,7);x.fill()};
+  const rod=(x1,y1,x2,y2,w,c)=>{x.lineCap="round";x.strokeStyle=c;x.lineWidth=w;x.beginPath();x.moveTo(x1,y1);x.lineTo(x2,y2);x.stroke();
+    x.strokeStyle="rgba(255,255,255,.35)";x.lineWidth=w*.32;x.beginPath();x.moveTo(x1,y1-w*.18);x.lineTo(x2,y2-w*.18);x.stroke()};
+  // helix: centre (cx,cy), axis angle, length L, radius R, phase t
+  function helix(cx,cy,ang,L,R,t,alpha){const ux=Math.cos(ang),uy=Math.sin(ang),nx=-uy,ny=ux,n=Math.max(14,Math.round(L/(R*.42))),step=L/n,items=[],per=[];
+    for(let i=0;i<=n;i++){const s=-L/2+i*step,a=i*.58+t*.9,cA=Math.cos(a),sA=Math.sin(a),px=cx+ux*s,py=cy+uy*s;
+      const p1={X:px+nx*R*cA,Y:py+ny*R*cA,z:sA},p2={X:px-nx*R*cA,Y:py-ny*R*cA,z:-sA};per.push([p1,p2]);
+      const k=((i%4)+4)%4,mX=(p1.X+p2.X)/2,mY=(p1.Y+p2.Y)/2;items.push({z:(p1.z+0)/2-.01,f:()=>rod(p1.X,p1.Y,mX,mY,R*.2*(1+p1.z*.15),BASE[k][0])});items.push({z:(p2.z+0)/2-.01,f:()=>rod(mX,mY,p2.X,p2.Y,R*.2*(1+p2.z*.15),BASE[k][1])})}
+    for(let i=0;i<per.length;i++)for(let j=0;j<2;j++){const p=per[i][j],r=R*.22*(1+p.z*.22);items.push({z:p.z,f:()=>ball(p.X,p.Y,r)});
+      if(i<per.length-1){const q=per[i+1][j];items.push({z:(p.z+q.z)/2-.02,f:()=>{x.lineCap="round";x.strokeStyle=BBs;x.lineWidth=R*.13*(1+(p.z+q.z)*.1);x.beginPath();x.moveTo(p.X,p.Y);x.lineTo(q.X,q.Y);x.stroke()}})}}
+    items.sort((a,b)=>a.z-b.z);x.globalAlpha=alpha;items.forEach(o=>o.f());x.globalAlpha=1}
+  // globe: wireframe sphere with data points, arcs with pulses, bars and an orbit ring
+  const gr=(s=>()=>(s=(Math.imul(s,1664525)+1013904223)>>>0)/4294967296)(23),pts=[];for(let i=0;i<34;i++)pts.push([Math.asin(2*gr()-1)/D*.9,gr()*360,i%4]);
+  const arcs=[[0,9],[3,14],[5,20],[8,25],[12,30],[15,4],[18,28],[22,6],[26,1],[33,17]],bars=[2,7,11,16,21,27,31];
+  const GC=["#D9718E","#9A8FD8","#7E8A73","#D9718E"],gInk=dk?"rgba(189,179,240,.6)":"rgba(74,63,120,.5)";
+  function globe(cx,cy,R,t,alpha){const l0=t*12.6,p0=20,P=(la,lo,r=1)=>{const L=(lo-l0)*D,f=la*D,q=p0*D;return{X:cx+r*R*Math.cos(f)*Math.sin(L),Y:cy-r*R*(Math.cos(q)*Math.sin(f)-Math.sin(q)*Math.cos(f)*Math.cos(L)),f:Math.sin(q)*Math.sin(f)+Math.cos(q)*Math.cos(f)*Math.cos(L)>0}};
+    x.globalAlpha=alpha;const g=x.createRadialGradient(cx-R*.35,cy-R*.4,R*.1,cx,cy,R);g.addColorStop(0,dk?"rgba(207,214,196,.22)":"rgba(255,255,255,.7)");g.addColorStop(1,dk?"rgba(207,214,196,.08)":"rgba(241,242,234,.35)");x.fillStyle=g;x.beginPath();x.arc(cx,cy,R,0,7);x.fill();
+    x.strokeStyle=gInk;x.lineWidth=1;x.beginPath();for(let la=-60;la<=60;la+=30){let pen=false;for(let lo=0;lo<=360;lo+=8){const p=P(la,lo);if(p.f){pen?x.lineTo(p.X,p.Y):x.moveTo(p.X,p.Y);pen=true}else pen=false}}
+    for(let lo=0;lo<360;lo+=30){let pen=false;for(let la=-90;la<=90;la+=8){const p=P(la,lo);if(p.f){pen?x.lineTo(p.X,p.Y):x.moveTo(p.X,p.Y);pen=true}else pen=false}}x.stroke();x.beginPath();x.arc(cx,cy,R,0,7);x.stroke();
+    const xyz=(la,lo)=>[Math.cos(la*D)*Math.cos(lo*D),Math.cos(la*D)*Math.sin(lo*D),Math.sin(la*D)],ll=v=>[Math.asin(Math.max(-1,Math.min(1,v[2])))/D,Math.atan2(v[1],v[0])/D];
+    arcs.forEach(([i,j],k)=>{const a=xyz(pts[i][0],pts[i][1]),b=xyz(pts[j][0],pts[j][1]),d=Math.acos(Math.max(-1,Math.min(1,a[0]*b[0]+a[1]*b[1]+a[2]*b[2])))||1e-3,ps=[];
+      for(let s=0;s<=30;s++){const u=s/30,k1=Math.sin((1-u)*d)/Math.sin(d),k2=Math.sin(u*d)/Math.sin(d),v=[a[0]*k1+b[0]*k2,a[1]*k1+b[1]*k2,a[2]*k1+b[2]*k2],[la,lo]=ll(v);ps.push(P(la,lo,1+.25*Math.sin(Math.PI*u)*d))}
+      x.strokeStyle=k%2?"#D9718E":"#9A8FD8";x.lineWidth=1.4;x.beginPath();let pen=false;ps.forEach(p=>{if(p.f){pen?x.lineTo(p.X,p.Y):x.moveTo(p.X,p.Y);pen=true}else pen=false});x.stroke();
+      const q=ps[Math.round(((t*(.25+k*.03)+k*.1)%1)*30)];if(q.f){x.fillStyle="#fff";x.beginPath();x.arc(q.X,q.Y,2.4,0,7);x.fill()}});
+    bars.forEach((i,k)=>{const[la,lo]=pts[i],h=1.18+.14*Math.sin(t*1.6+k),a=P(la,lo),b=P(la,lo,h);if(a.f){x.strokeStyle=GC[k%4];x.lineWidth=3.2;x.lineCap="round";x.beginPath();x.moveTo(a.X,a.Y);x.lineTo(b.X,b.Y);x.stroke()}});
+    pts.forEach(([la,lo,c],i)=>{const p=P(la,lo,1.01);if(p.f){x.fillStyle=GC[c];x.beginPath();x.arc(p.X,p.Y,i%5===0?3.4:2.2,0,7);x.fill()}});
+    const rx=R*1.32,ry=R*.42,rt=-.35;x.save();x.translate(cx,cy);x.rotate(rt);x.strokeStyle=gInk;x.lineWidth=1;x.beginPath();x.ellipse(0,0,rx,ry,0,0,7);x.stroke();const sa=t*.9;x.fillStyle="#D9718E";x.beginPath();x.arc(Math.cos(sa)*rx,Math.sin(sa)*ry,4,0,7);x.fill();x.restore();x.globalAlpha=1}
   let last=0;
-  function frame(now){requestAnimationFrame(frame);if(now-last<50)return;last=now;const op=Math.max(0,1-scrollY/(innerHeight*.85));cv.style.opacity=op.toFixed(2);if(op<=0)return;
-    const t=RM?0:now/1000,wide=W>820,cx0=W*(wide?.52:.62),amp=Math.min(W,H)*(wide?.1:.13),n=30,step=H*1.25/n,shift=(t*26)%step;
-    x.setTransform(dpr,0,0,dpr,0,0);x.clearRect(0,0,W,H);const pts=[];
-    for(let i=-1;i<n;i++){const y=-H*.1+i*step+shift,a=(i-Math.floor(t*26/step))*.52+t*.8,cx=cx0+(y-H/2)*(wide?-.32:-.18);pts.push({y,a,cx,k:((i-Math.floor(t*26/step))%4+4)%4})}
-    const draw=(front)=>pts.forEach(p=>{const s=Math.sin(p.a),c=Math.cos(p.a);[[s,c,0],[-s,-c,1]].forEach(([ss,cc,j])=>{if((cc>0)!==front)return;const X=p.cx+ss*amp,r=6+cc*2.5;
-      x.fillStyle=strand;x.strokeStyle=edge;x.lineWidth=1;x.beginPath();x.arc(X,p.y,r,0,7);x.fill();x.stroke()})});
-    draw(false);
-    pts.forEach(p=>{const s=Math.sin(p.a),x1=p.cx+s*amp,x2=p.cx-s*amp,m=(x1+x2)/2,[c1,c2]=pair[p.k];x.lineWidth=6;x.lineCap="round";
-      x.strokeStyle=c1;x.beginPath();x.moveTo(x1,p.y);x.lineTo(m,p.y);x.stroke();x.strokeStyle=c2;x.beginPath();x.moveTo(m,p.y);x.lineTo(x2,p.y);x.stroke()});
-    draw(true)}
+  function frame(now){requestAnimationFrame(frame);if(document.hidden||now-last<50)return;last=now;const t=RM?2:now/1000,wide=W>820,hero=Math.max(0,1-scrollY/(innerHeight*.7));
+    x.setTransform(dpr,0,0,dpr,0,0);x.clearRect(0,0,W,H);
+    if(hero>0){const R=Math.min(W,H)*(wide?.12:.16);helix(W*(wide?.36:.62),H*.5,wide?1.25:1.35,H*1.35,R,t,hero);globe(W*(wide?.72:.2),H*(wide?.3:.46),Math.min(W,H)*(wide?.13:.14),t,hero)}
+    if(hero<1){const a=1-hero,R=Math.min(W,H)*(wide?.06:.07);helix(W/2,H*(wide?.88:.9),0,W*1.1,R,t,a*.85);if(wide)globe(W*.9,H*.17,Math.min(W,H)*.075,t,a*.85)}}
   requestAnimationFrame(frame)}
 if(document.readyState==="loading")addEventListener("DOMContentLoaded",start);else setTimeout(start,0);
 })();
