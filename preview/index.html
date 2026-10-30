@@ -853,7 +853,9 @@ window.SoftRenderer=function(cv){
   const x=cv.getContext("2d");let W=1,H=1,dpr=1,last=0;
   const V=window.THREE&&THREE.Vector3,a=new V(),b=new V(),c=new V();
   this.domElement=cv;
-  this.setPixelRatio=p=>{dpr=Math.min(p||1,1.5)};
+  this.setPixelRatio=p=>{dpr=1};
+  const SPR={};const sprite=(col,em)=>{const k=col.getHexString()+(em?'e':'');if(SPR[k])return SPR[k];const c2=document.createElement('canvas');c2.width=c2.height=64;const g2=c2.getContext('2d');
+    const gr=g2.createRadialGradient(22,20,4,32,32,31);gr.addColorStop(0,mix(col,.6+(em?.15:0),1));gr.addColorStop(.6,mix(col,0,1));gr.addColorStop(1,mix(col,.32,0));g2.fillStyle=gr;g2.beginPath();g2.arc(32,32,31,0,7);g2.fill();return SPR[k]=c2};
   this.setSize=(w,h)=>{W=w;H=h;cv.width=Math.round(w*dpr);cv.height=Math.round(h*dpr);cv.style.width=w+"px";cv.style.height=h+"px"};
   const mix=(col,t,to)=>{const r=col.r+(to-col.r)*t,g=col.g+(to-col.g)*t,bb=col.b+(to-col.b)*t;return`rgb(${r*255|0},${g*255|0},${bb*255|0})`};
   this.render=(scene,cam)=>{const now=performance.now();if(now-last<38)return;last=now;
@@ -864,13 +866,12 @@ window.SoftRenderer=function(cv){
       const sc=o.matrixWorld.getMaxScaleOnAxis();
       if(t==="SphereGeometry"){const p=S(a.setFromMatrixPosition(o.matrixWorld));if(!p||off(p))return;const r=g.parameters.radius*sc*p.k;if(r<.3)return;
         const big=r>40;items.push({z:p.z+(big?0:0),f:()=>{x.globalAlpha=op;if(basic){x.fillStyle=mix(col,0,1);x.beginPath();x.arc(p.X,p.Y,r,0,7);x.fill()}else{
-          const gr=x.createRadialGradient(p.X-r*.35,p.Y-r*.4,r*.1,p.X,p.Y,r);const e=m.emissive&&m.emissiveIntensity?.15:0;gr.addColorStop(0,mix(col,.6+e,1));gr.addColorStop(.6,mix(col,0,1));gr.addColorStop(1,mix(col,.32,0));
-          x.fillStyle=gr;x.beginPath();x.arc(p.X,p.Y,r,0,7);x.fill()}x.globalAlpha=1}})}
+          x.drawImage(sprite(col,!!(m.emissive&&m.emissiveIntensity)),p.X-r,p.Y-r,2*r,2*r)}x.globalAlpha=1}})}
       else if(t==="CylinderGeometry"){const h=g.parameters.height/2,p=S(a.set(0,-h,0).applyMatrix4(o.matrixWorld)),q=S(b.set(0,h,0).applyMatrix4(o.matrixWorld),{});if(!p||!q||(off(p)&&off(q)))return;
         const e=o.matrixWorld.elements,sx=Math.hypot(e[0],e[1],e[2]),w=Math.max(1,2*g.parameters.radiusTop*sx*(p.k+q.k)/2),c1=mix(col,0,1),hl=mix(col,.45,1);
         items.push({z:(p.z+q.z)/2,f:()=>{x.globalAlpha=op;x.lineCap="round";x.strokeStyle=c1;x.lineWidth=w;x.beginPath();x.moveTo(p.X,p.Y);x.lineTo(q.X,q.Y);x.stroke();
           x.strokeStyle=hl;x.lineWidth=w*.34;x.beginPath();x.moveTo(p.X-w*.12,p.Y-w*.16);x.lineTo(q.X-w*.12,q.Y-w*.16);x.stroke();x.globalAlpha=1}})}
-      else if(t==="TubeGeometry"){const path=g.parameters.path,n=150,rad=g.parameters.radius*sc,c1=mix(col,.1,1);let prev=S(a.copy(path.getPointAt(0)).applyMatrix4(o.matrixWorld),{});
+      else if(t==="TubeGeometry"){const path=g.parameters.path,n=260,rad=g.parameters.radius*sc,c1=mix(col,.1,1);let prev=S(a.copy(path.getPointAt(0)).applyMatrix4(o.matrixWorld),{});
         for(let i=1;i<=n;i++){const cur=S(a.copy(path.getPointAt(i/n)).applyMatrix4(o.matrixWorld),{}),p0=prev;prev=cur;if(!p0||!cur||(off(p0)&&off(cur)))continue;const w=Math.max(1,2*rad*(p0.k+cur.k)/2);
           items.push({z:(p0.z+cur.z)/2+.02,f:()=>{x.lineCap="round";x.strokeStyle=c1;x.lineWidth=w;x.beginPath();x.moveTo(p0.X,p0.Y);x.lineTo(cur.X,cur.Y);x.stroke()}})}}
       else if(t==="TorusGeometry"){const R=g.parameters.radius,pts=[];for(let i=0;i<=72;i++){const an=i/72*Math.PI*2;const p=S(a.set(Math.cos(an)*R,Math.sin(an)*R,0).applyMatrix4(o.matrixWorld),{});if(p)pts.push(p)}
@@ -1264,7 +1265,7 @@ if(window.Lenis&&!reduce){try{const lenis=new Lenis({lerp:.085,smoothWheel:true,
       x.beginPath();x.ellipse(0,r*1.25,r*.8,r*.25,0,0,7);x.strokeStyle=c+"60";x.lineWidth=1;x.stroke();break}
     case "wave":{for(let k=0;k<2;k++){x.beginPath();for(let i=0;i<=40;i++){const u=i/40;x.lineTo(-o.L/2+u*o.L,k*8+Math.sin(u*Math.PI*3+time*1.5+o.ph+k)*o.amp)}x.strokeStyle=c+(k?"70":"D0");x.lineWidth=2;x.lineCap="round";x.stroke()}break}
     }}
-  const TXT=".hero-meta .who,.hero-meta .where,.year-tag,.hero-title,.about .lead,.about-inner>p,.ds-row>div,.about .links,.labs,.rail .hand-h,.rail-sub,.tl>li,.edu-card,.edu-certs,.contact .hand-big,.contact p,.contact .mail,.contact .links,.foot,.works-head>*,.works .card,.toolkit .hand-h,.tk-grid>div,.two>div,.facts li,.fit div";
+  const TXT=".deg-path,.jr-globe,.namedna,.wk-filters,.hero-meta .who,.hero-meta .where,.year-tag,.hero-title,.about .lead,.about-inner>p,.ds-row>div,.about .links,.labs,.rail .hand-h,.rail-sub,.tl>li,.edu-card,.edu-certs,.contact .hand-big,.contact p,.contact .mail,.contact .links,.foot,.works-head>*,.works .card,.toolkit .hand-h,.tk-grid>div,.two>div,.facts li,.fit div";
   let rects=[],rT=0;
   function readRects(){rects=[];document.querySelectorAll(TXT).forEach(el=>{const r=el.getBoundingClientRect();
     if(r.bottom>-40&&r.top<H+40&&r.width>0&&getComputedStyle(el).opacity!=="0")rects.push([r.left-34,r.top-26,r.right+34,r.bottom+26])});
@@ -1370,7 +1371,7 @@ addEventListener("resize",resize);resize();
 const zones=[["top",{x:0,z:12,s:1.12}],["about",{x:0,z:15,s:.9}],["resume",{x:-1,z:9.5,s:1}],["education",{x:-1,z:10.5,s:1}],["toolkit",{x:0,z:14,s:.62}],["contact",{x:.35,z:14,s:.85}]];
 const els=zones.map(([id])=>document.getElementById(id));
 let cur={x:0,z:13,s:1,y:0,rz:.34,g:0,gx:.735,gy:.25,gr:118},visible=true,workFlat=false,laneOn=false,laneSince=0;
-const GTXT=".jr-globe,.hero-meta .who,.hero-meta .where,.year-tag,.hero-title,.about .lead,.about-inner>p,.ds-row>div,.about .links,.labs,.rail .hand-h,.rail-sub,.tl>li,.edu-card,.edu-certs,.contact .hand-big,.contact p,.contact .mail,.contact .links,.foot,.works-head>*,.works .card,.toolkit .hand-h,.tk-grid>div,.two>div,.facts li,.fit div,#mascot";
+const GTXT=".deg-path,.jr-globe,.namedna,.wk-filters,.hero-meta .who,.hero-meta .where,.year-tag,.hero-title,.about .lead,.about-inner>p,.ds-row>div,.about .links,.labs,.rail .hand-h,.rail-sub,.tl>li,.edu-card,.edu-certs,.contact .hand-big,.contact p,.contact .mail,.contact .links,.foot,.works-head>*,.works .card,.toolkit .hand-h,.tk-grid>div,.two>div,.facts li,.fit div,#mascot";
 const GTIGHT=".year-tag,.hero-title,.hand-h,.hand-big,.hero-meta .who,.hero-meta .where,.rail-sub",gRange=document.createRange();
 let gSpot=null,gT=0;
 function freeSpot(sel){const W=innerWidth,H=innerHeight,wide=W>820,soft=!!sel,want=wide?Math.min(240,H*.3):soft?Math.min(165,W*.42):Math.min(100,W*.26),min=wide?82:46,pad=wide?12:8;
@@ -1534,11 +1535,14 @@ const CFG={
 function txt(el,sel){const n=el.querySelector(sel);return n?n.textContent.trim():""}
 function story(id){const cv=document.getElementById(id),cfg=CFG[id];if(!cv)return;const x=cv.getContext("2d"),box=cv.closest(".jr-globe"),cap=box.querySelector(".jr-cap");
   const stage=box.querySelector(".jr-stage"),mas=document.getElementById("mascot");
-  if(stage&&mas&&!stage.querySelector(".jr-av")){const av=mas.cloneNode(true);av.removeAttribute("id");av.removeAttribute("style");av.removeAttribute("role");av.removeAttribute("aria-label");av.className="jr-av";av.setAttribute("aria-hidden","true");
-    av.querySelectorAll("#mascotImg").forEach(n=>n.removeAttribute("id"));
-    // give the copied eye layer its own ids, so its gradients and clip paths do not clash with the original
-    const sfx="-"+id;av.querySelectorAll("[id]").forEach(n=>{const old=n.id,nw=old+sfx;n.id=nw;av.querySelectorAll("*").forEach(e=>{for(const at of [...e.attributes]){if(at.value.includes("#"+old+")")||at.value==="#"+old)e.setAttribute(at.name,at.value.split("#"+old+")").join("#"+nw+")").replace(new RegExp("^#"+old+"$"),"#"+nw))}})});
-    av.querySelectorAll(".miris").forEach(g=>{g.classList.remove("miris");g.setAttribute("transform",`translate(${(+g.dataset.cx-11).toFixed(1)} ${(+g.dataset.cy+3).toFixed(1)})`)});stage.appendChild(av)}
+  if(stage&&mas&&!stage.querySelector(".jr-av")){const av=document.createElement("div");av.className="jr-av";av.setAttribute("aria-hidden","true");
+    let html=mas.innerHTML;const ids=[...new Set([...html.matchAll(/id="([^"]+)"/g)].map(m=>m[1]))];
+    ids.forEach(old=>{const nw=old+"-"+id;html=html.split('id="'+old+'"').join('id="'+nw+'"').split("url(#"+old+")").join("url(#"+nw+")").split('href="#'+old+'"').join('href="#'+nw+'"')});
+    av.innerHTML=html;av.querySelectorAll("img").forEach(n=>n.removeAttribute("id"));stage.appendChild(av);
+    const eyes=[...av.querySelectorAll(".miris")].map(g=>({g,cx:+g.dataset.cx,cy:+g.dataset.cy}));let ex=-.9,ey=.25,tx=-.9,ty=.25,lastP=-1e9;
+    const set=()=>eyes.forEach(o=>o.g.setAttribute("transform",`translate(${(o.cx+ex*12).toFixed(1)} ${(o.cy+ey*5.5).toFixed(1)})`));set();
+    addEventListener("pointermove",e=>{const r=av.getBoundingClientRect();if(!r.width)return;const fx=r.left+r.width*.495,fy=r.top+r.height*.228,dx=e.clientX-fx,dy=e.clientY-fy,d=Math.hypot(dx,dy)||1,reach=Math.min(1,d/(Math.min(innerWidth,innerHeight)*.35));tx=dx/d*reach;ty=dy/d*reach;lastP=performance.now()},{passive:true});
+    (function eyeLoop(now){if(now-lastP>3000){tx=-.9;ty=.25}ex+=(tx-ex)*.15;ey+=(ty-ey)*.15;if(av.getBoundingClientRect().bottom>0)set();requestAnimationFrame(eyeLoop)})(performance.now())}
   const items=[...document.querySelectorAll(cfg.items)];let act=0,S=0,dpr=1,c={},vis=false,last=0,l0=PL[cfg.places[0]].lon,p0=PL[cfg.places[0]].lat*.7,drag=null,idle=-1e9;
   const dots=box.querySelector(".jr-steps");if(dots){dots.innerHTML=items.map((_,i)=>`<i data-i="${i}"></i>`).join("")}
   function setCap(i){const el=items[i];if(!el||!cap)return;const p=PL[cfg.places[i]];
