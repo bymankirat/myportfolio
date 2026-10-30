@@ -1762,23 +1762,17 @@ print(null,`Welcome! This terminal knows about my work. Type <b>help</b>, or tap
 })();
 
 /* The avatar talks. The bubble lives inside the avatar, so it moves with him and never flickers.
-   Each section starts with its own tip; as you keep scrolling it moves on to facts about me. */
+   One short tip per section; it changes only when you scroll into a new section. */
 (function(){
 const mas=document.getElementById("mascot");if(!mas)return;
 const b=document.createElement("div");b.id="say";b.setAttribute("aria-live","polite");b.innerHTML="<span></span>";mas.appendChild(b);const txt=b.querySelector("span");
 const TIPS={top:"Hi, I'm Mankirat. Scroll down to see what I build.",about:"From the bench to the code: I do both.",resume:"Watch the globe: it follows my research.",
   education:"Three degrees, three cities.",work:"Hover a picture to replay it, or try the filters.",toolkit:"Try my terminal below. Type help.",contact:"Say hello! I reply quickly."};
-const FACTS=["I've analysed 40,124 clinical trials.","GRSS roller-skating champion, by the way.","My photography has been on Photo Vogue.","Sat sri akal! Namaste! Hello!",
-  "My first lab tool was a manual microtome.","My demand forecast beats the benchmark by 34%.","I followed one banana gene across 17 genomes.","I map Ireland: 3,420 communities."];
-const ids=Object.keys(TIPS);let zone="",fi=-1,acc=0,lastY=scrollY,shown="";
+const ids=Object.keys(TIPS);let zone="",shown="";
 function cur(){const mid=innerHeight*.5;let best=zone;for(const id of ids){const el=document.getElementById(id);if(!el)continue;const r=el.getBoundingClientRect();if(r.top<=mid&&r.bottom>=mid){best=id;break}}return best}
 function say(s){if(s===shown)return;shown=s;b.classList.remove("pop");void b.offsetWidth;txt.textContent=s;b.classList.add("pop")}
-function update(){const z=cur();const dy=Math.abs(scrollY-lastY);lastY=scrollY;
-  if(z!==zone){zone=z;acc=0;say(TIPS[z]||TIPS.top);return}
-  acc+=dy;if(acc>innerHeight*.55){acc=0;fi=(fi+1)%FACTS.length;say(FACTS[fi])}}
+function update(){const z=cur();if(z!==zone){zone=z;say(TIPS[z]||TIPS.top)}}
 let raf=0;addEventListener("scroll",()=>{if(!raf)raf=requestAnimationFrame(()=>{raf=0;update()})},{passive:true});
-// a new fact every 9 seconds while the page is still
-setInterval(()=>{if(document.hidden)return;fi=(fi+1)%FACTS.length;say(FACTS[fi])},9000);
 update();
 })();
 
