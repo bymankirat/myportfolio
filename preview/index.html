@@ -1332,7 +1332,7 @@ addEventListener("resize",resize);resize();
 const zones=[["top",{x:0,z:12,s:1.12}],["about",{x:0,z:15,s:.9}],["resume",{x:-1,z:9.5,s:1}],["education",{x:-1,z:10.5,s:1}],["toolkit",{x:0,z:14,s:.62}],["contact",{x:.35,z:14,s:.85}]];
 const els=zones.map(([id])=>document.getElementById(id));
 let cur={x:0,z:13,s:1,y:0,rz:.34,g:0,gx:.735,gy:.25,gr:118},visible=true,workFlat=false,laneOn=false,laneSince=0;
-const GTXT=".hero-meta .who,.hero-meta .where,.year-tag,.hero-title,.about .lead,.about-inner>p,.ds-row>div,.about .links,.labs,.rail .hand-h,.rail-sub,.tl>li,.edu-card,.edu-certs,.contact .hand-big,.contact p,.contact .mail,.contact .links,.foot,.works-head>*,.works .card,.toolkit .hand-h,.tk-grid>div,.two>div,.facts li,.fit div,#mascot";
+const GTXT=".jr-globe,.hero-meta .who,.hero-meta .where,.year-tag,.hero-title,.about .lead,.about-inner>p,.ds-row>div,.about .links,.labs,.rail .hand-h,.rail-sub,.tl>li,.edu-card,.edu-certs,.contact .hand-big,.contact p,.contact .mail,.contact .links,.foot,.works-head>*,.works .card,.toolkit .hand-h,.tk-grid>div,.two>div,.facts li,.fit div,#mascot";
 const GTIGHT=".year-tag,.hero-title,.hand-h,.hand-big,.hero-meta .who,.hero-meta .where,.rail-sub",gRange=document.createRange();
 let gSpot=null,gT=0;
 function freeSpot(sel){const W=innerWidth,H=innerHeight,wide=W>820,soft=!!sel,want=wide?Math.min(240,H*.3):soft?Math.min(165,W*.42):Math.min(100,W*.26),min=wide?82:46,pad=wide?12:8;
@@ -1392,7 +1392,7 @@ function target(){let best=0,bv=-1;els.forEach((el,i)=>{const r=el.getBoundingCl
   } else {laneOn=false;laneSince=0}
   // the globe travels with the DNA through every section: find the largest free spot on screen
   const nowG=performance.now();if(nowG-gT>250){gT=nowG;gSpot=globeSpot()}
-  if(gSpot&&!/^(resume|education)$/.test(zones[best][0])){t.gx=gSpot[0]/innerWidth;t.gy=gSpot[1]/Hh;t.gr=gSpot[2]/1.38;t.g=1}else{t.g=0;t.gx=cur.gx;t.gy=cur.gy;t.gr=cur.gr}
+  if(gSpot){t.gx=gSpot[0]/innerWidth;t.gy=gSpot[1]/Hh;t.gr=gSpot[2]/1.38;t.g=1}else{t.g=0;t.gx=cur.gx;t.gy=cur.gy;t.gr=cur.gr}
   // set the canvas opacity once per frame (setting it twice between layout reads keeps restarting the fade)
   const op=(!wide&&!inWork&&!workFlat&&zones[best][0]!=="top")?".14":"1"; // phones: text spans the width, so the DNA stays very faint
   if(cv.style.opacity!==op)cv.style.opacity=op;
