@@ -1,0 +1,98 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CYP19A1 protein in tissue images</title>
+<style>
+body{font:16px/1.6 system-ui,Segoe UI,Arial,sans-serif;max-width:900px;margin:0 auto;padding:24px 16px;color:#1d2733;background:#fff}
+h1{font-size:28px;margin:0 0 4px} h2{margin-top:40px;border-bottom:1px solid #d9e0e8;padding-bottom:6px}
+.sub{color:#5b6b7c;margin-bottom:24px} img{max-width:100%;height:auto;border:1px solid #e3e8ee;border-radius:6px}
+table{border-collapse:collapse;width:100%;font-size:14px;margin:12px 0} th,td{border-bottom:1px solid #e3e8ee;padding:5px 8px;text-align:left}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin:20px 0}
+.kpi{background:#f4f7fa;border-radius:8px;padding:12px 14px} .kpi b{display:block;font-size:22px}
+.note{background:#fff7e6;border-left:4px solid #e0a030;padding:10px 14px;margin:16px 0}
+.cap{color:#5b6b7c;font-size:14px;margin:18px 0 4px}
+code{background:#f0f3f6;padding:1px 4px;border-radius:3px} a{color:#2f6aa3}
+@media (prefers-color-scheme:dark){body{background:#12171d;color:#e4e9ef}.kpi{background:#1c242d}th,td{border-color:#2a3541}.note{background:#2a2414}code{background:#222c36}img{border-color:#2a3541}h2{border-color:#2a3541}.cap{color:#9fb0c2}a{color:#7fb0e0}}
+</style></head><body>
+<h1>CYP19A1 protein in human tissue images</h1>
+<div class="sub">An R image analysis of Human Protein Atlas staining for the aromatase protein. Results of the October 2026 run.</div>
+
+<div class="kpis">
+ <div class="kpi"><b>Placenta only</b>tissue with detectable protein (1 of 45 tissues)</div>
+ <div class="kpi"><b>56.4 vs 0.01</b>median image H-score, stained vs unstained tissue (p = 0.0032)</div>
+ <div class="kpi"><b>rho 0.14</b>image score vs RNA in the 40 unstained tissues (p = 0.40)</div>
+ <div class="kpi"><b>135 images</b>scored by colour deconvolution, 41 tissues matched to RNA</div>
+</div>
+
+<div class="note"><b>Data and scope.</b> Only public data: Human Protein Atlas immunohistochemistry images, pathologist annotations
+and consensus RNA (downloaded October 2026), used under CC BY-SA 4.0. No unpublished or institutional data are used. Staining is semi-quantitative,
+so these are comparisons between tissues, not measurements of protein amount.</div>
+
+<h2>Question</h2>
+<p>My <a href="https://bymankirat.github.io/CYP19A1-Expression-Ovarian-R/">earlier project</a> ranked CYP19A1 (aromatase) RNA across human
+tissues. RNA is not protein. This project asks whether the <b>protein</b>, measured directly from tissue staining images, follows the same pattern.</p>
+
+<h2>Phase 1 - where is the RNA, and where is the protein?</h2>
+<p>Pathologists at the Human Protein Atlas scored CYP19A1 staining in 45 normal tissues. Protein was detected only in <b>placenta</b>
+(syncytiotrophoblasts, level High), which is also the top RNA tissue (117.1 nTPM). The next highest RNA tissues, adipose tissue (8.2 nTPM),
+adrenal gland (7.9), testis (5.9) and ovary (3.2), show no detectable protein. Across the 41 tissues present in both tables, pathologist level
+against RNA gives Spearman rho = 0.27 (p = 0.089): only a weak trend, because one tissue drives it.</p>
+<img src="figures/fig1_rna_and_protein.png" alt="CYP19A1 RNA in the top 10 tissues, coloured by whether protein was detected">
+<table><thead><tr><th>tissue</th><th>RNA (nTPM)</th><th>pathologist protein</th><th>cell types examined</th></tr></thead><tbody><tr><td>placenta</td><td>117.1</td><td>High</td><td>syncytiotrophoblasts – cell body</td></tr><tr><td>adipose tissue</td><td>8.2</td><td>Not detected</td><td>adipocytes</td></tr><tr><td>adrenal gland</td><td>7.9</td><td>Not detected</td><td>glandular cells</td></tr><tr><td>testis</td><td>5.9</td><td>Not detected</td><td>cells in seminiferous ducts; Leydig cells</td></tr><tr><td>ovary</td><td>3.2</td><td>Not detected</td><td>follicle cells; ovarian stroma cells</td></tr><tr><td>urinary bladder</td><td>3.2</td><td>Not detected</td><td>urothelial cells</td></tr><tr><td>seminal vesicle</td><td>2.3</td><td>Not detected</td><td>glandular cells</td></tr><tr><td>thyroid gland</td><td>2.3</td><td>Not detected</td><td>glandular cells</td></tr><tr><td>breast</td><td>2.0</td><td>Not detected</td><td>adipocytes; glandular cells; myoepithelial cells</td></tr><tr><td>skin</td><td>1.6</td><td>Not detected</td><td>fibroblasts; keratinocytes; Langerhans cells; melanocytes</td></tr></tbody></table>
+
+<h2>Phase 2 - measuring the stain from the images</h2>
+<p>For 135 images (3 per tissue) the brown antibody stain (DAB) was separated from the blue nuclear stain by <b>colour deconvolution</b>
+(Ruifrok and Johnston 2001). Tissue was separated from background glass by Otsu thresholding, and DAB inside the tissue was scored as weak,
+moderate or strong and combined into an H-score-like value from 0 to 300. A pixel only counts as stain if it is <b>browner than blue</b>
+(DAB signal at least equal to haematoxylin), which removes dark folds, debris and pigment.</p>
+
+<h3>Does the image score agree with the pathologist?</h3>
+<p>The 3 placenta images, the only tissue called positive, have a median H-score of 56.4, against 0.01 for the 132 images from tissues called
+negative (Wilcoxon p = 0.0032). The automated score separates stained from unstained tissue in the same way as the pathologist, so the pipeline
+picks up real CYP19A1 staining. The five highest-scoring tissues were placenta, bone marrow, spleen, parathyroid gland and rectum.</p>
+
+<h3>Quality control</h3>
+<p>Each panel shows the original image, the raw DAB channel, and in red the pixels counted as stain after the brown filter. Only placenta shows
+real brown staining; the small red specks in the other high-ranking tissues are debris at the tissue edge, and the black blob in rectum is
+removed by the filter.</p>
+<p class="cap"><b>Placenta</b></p><img src="qc/top_placenta.png" alt="QC panel for placenta">
+<p class="cap"><b>Bone marrow</b></p><img src="qc/top_bone_marrow.png" alt="QC panel for bone marrow">
+<p class="cap"><b>Spleen</b></p><img src="qc/top_spleen.png" alt="QC panel for spleen">
+<p class="cap"><b>Parathyroid gland</b></p><img src="qc/top_parathyroid_gland.png" alt="QC panel for parathyroid gland">
+<p class="cap"><b>Rectum</b></p><img src="qc/top_rectum.png" alt="QC panel for rectum">
+<p class="cap"><b>Adipose tissue</b></p><img src="qc/top_adipose_tissue.png" alt="QC panel for adipose tissue">
+
+<h2>Phase 3 - does protein follow RNA outside placenta?</h2>
+<p>If CYP19A1 protein were present below the pathologist's detection limit, the image score should still rise with RNA in the 40 tissues called
+negative. Without the brown filter it seems to: rho = 0.31 (p = 0.049). With the filter: rho = 0.14 (p = 0.40). So quality control changed the
+conclusion. The apparent link between RNA and staining came from folds, debris and pigment, not from antibody; once those pixels are removed, it disappears.</p>
+<table><thead><tr><th>comparison</th><th>tissues</th><th>Spearman rho</th><th>p</th></tr></thead><tbody>
+<tr><td>Pathologist protein level vs RNA</td><td>41</td><td>0.27</td><td>0.089</td></tr>
+<tr><td>Image score vs RNA, all tissues</td><td>41</td><td>0.20</td><td>0.21</td></tr>
+<tr><td>Image score vs RNA, without placenta – before brown filter</td><td>40</td><td>0.31</td><td>0.049</td></tr>
+<tr><td>Image score vs RNA, without placenta – after brown filter</td><td>40</td><td>0.14</td><td>0.40</td></tr></tbody></table>
+
+<h2>What it means</h2>
+<ul>
+<li><b>CYP19A1 protein is restricted to placenta.</b> Placental aromatase turns androgens into oestrogens during pregnancy, so a strong placental
+signal fits known biology.</li>
+<li><b>RNA does not mean detectable protein.</b> Adipose tissue, adrenal gland, testis and ovary express CYP19A1 RNA but show no staining. Likely
+reasons are expression below the sensitivity of this antibody, expression confined to small cell groups (adipose stromal cells, Leydig or
+granulosa cells) that a small tissue core can miss, and regulation after transcription.</li>
+<li><b>Automated image scores need visual checks.</b> The unfiltered score produced an association with RNA that was an artefact.</li>
+</ul>
+
+<h2>Limits</h2>
+<ul>
+<li>Immunohistochemistry is semi-quantitative; staining depends on the antibody, fixation and imaging.</li>
+<li>Only 3 images per tissue were scored, from a few donors.</li>
+<li>DAB thresholds and the brown filter were set by inspecting QC panels; small brown debris at tissue edges still adds tiny scores.</li>
+<li>Only one tissue was positive, so a graded protein-RNA correlation cannot be tested well.</li>
+<li>Tissue names differ between the staining and RNA tables; 14 tissues could not be matched (bronchus, nasopharynx, oral mucosa, soft tissue,
+blood vessel, hypothalamus, retina, spinal cord, midbrain, tongue, thymus, amygdala, choroid plexus, pituitary gland).</li>
+</ul>
+<h2>Reproduce</h2>
+<p><code>source("run_all.R")</code> from the project folder in R (4.0 or later). It downloads the tables and images once, scores
+every image, and writes this page with the full set of figures. Code: <a href="https://github.com/bymankirat/CYP19A1-Protein-Images-R">github.com/bymankirat/CYP19A1-Protein-Images-R</a>. Seed 1.</p>
+<p class="cap">Data: Human Protein Atlas, www.proteinatlas.org (Uhlen et al., Science 2015), CC BY-SA 4.0.
+Method: Ruifrok AC and Johnston DA, Anal Quant Cytol Histol 2001.</p>
+</body></html>
