@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<script>(function(){var V=24;if(location.protocol.indexOf("http")!==0)return;try{fetch("version.json?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.json():null}).then(function(j){if(!j||!(j.v>V))return;var k="mk-reload-"+j.v;try{if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,"1")}catch(e){}location.replace(location.pathname+"?v="+j.v+location.hash)}).catch(function(){})}catch(e){}})();</script>
+<script>(function(){var V=25;if(location.protocol.indexOf("http")!==0)return;try{fetch("version.json?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.json():null}).then(function(j){if(!j||!(j.v>V))return;var k="mk-reload-"+j.v;try{if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,"1")}catch(e){}location.replace(location.pathname+"?v="+j.v+location.hash)}).catch(function(){})}catch(e){}})();</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Mankirat Singh | Bioinformatics &amp; Data Science</title>
@@ -10,7 +10,7 @@
 <meta property="og:url" content="https://bymankirat.github.io/myportfolio/">
 <meta property="og:site_name" content="Mankirat Singh">
 <meta property="og:title" content="Mankirat Singh | Bioinformatics &amp; Data Science">
-<meta property="og:description" content="Bioinformatician and data scientist in Cork. 21 projects across omics, clinical data and Ireland's energy grid, from the wet lab to code.">
+<meta property="og:description" content="Bioinformatician and data scientist in Cork. 22 projects across omics, clinical data and Ireland's energy grid, from the wet lab to code.">
 <meta property="og:image" content="https://bymankirat.github.io/myportfolio/preview.jpg?v=23">
 <meta property="og:image:secure_url" content="https://bymankirat.github.io/myportfolio/preview.jpg?v=23">
 <meta property="og:image:type" content="image/jpeg">
@@ -19,7 +19,7 @@
 <meta property="og:image:alt" content="Mankirat Singh's portfolio: a 3D DNA helix, a data globe and his 3D avatar">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Mankirat Singh | Bioinformatics &amp; Data Science">
-<meta name="twitter:description" content="21 projects across omics, clinical data and Ireland's energy grid, from the wet lab to code.">
+<meta name="twitter:description" content="22 projects across omics, clinical data and Ireland's energy grid, from the wet lab to code.">
 <meta name="twitter:image" content="https://bymankirat.github.io/myportfolio/preview.jpg?v=23">
 <meta name="description" content="Mankirat Singh, bioinformatician and data scientist. Multi-omics analysis, statistics and machine learning in Python, R and SQL, backed by hands-on lab experience.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -568,7 +568,7 @@ dialog[open]{animation:pop .28s cubic-bezier(.2,.9,.3,1.15)}
       <p>I'm a bioinformatician and data scientist who works end to end: from the experiments that generate the data (NGS assay development, qPCR, in vivo studies, microtomy) to the Python, R and SQL pipelines that clean, analyse and model it, and the charts and write-ups that explain it to scientists and non-specialists alike. I'm currently completing my MSc at University College Cork, with a thesis at IBIMA Plataforma BIONAND in Málaga integrating microbiome and metabolomics data from bariatric surgery patients. I've also applied the same skills to public data: a CDISC clinical trial taken from raw data to safety tables with independent double-programming QC, how airway cells respond to H7N9 compared with three other flu strains, the banana DNA-damage gene I cloned at NABI followed across 17 plant genomes, why 40,124 clinical trials stop early and which ones are at risk, a 7-day early warning for river low flows, day-ahead forecasts of Ireland's electricity demand, how much wind the all-island grid turns away when demand is low, checked against EirGrid's own figures, 2040 plans for Cork's and Dublin's electricity grids with interactive substation maps, who Cork's planned commuter rail stations would reach, a Census 2022 study of health and deprivation across 3,420 communities, a monthly unemployment outlook, a weekly KPI toolkit for a discount supermarket chain, and a propensity-versus-uplift study of who a subscriber campaign should contact.</p>
       <ul class="facts">
         <li><b>3</b><span>degrees, from life sciences to bioinformatics</span></li>
-        <li><b>21</b><span>research and data science projects</span></li>
+        <li><b>22</b><span>research and data science projects</span></li>
         <li><b>4</b><span>labs and R&amp;D teams in India and Spain</span></li>
         <li><b>2</b><span>omics layers integrated in my thesis: microbiome and metabolome</span></li>
         <li><b>34%</b><span>more accurate electricity forecasts than the industry benchmark</span></li>
@@ -731,7 +731,7 @@ dialog[open]{animation:pop .28s cubic-bezier(.2,.9,.3,1.15)}
     <div class="works-sticky">
       <div class="works-head">
         <h2 class="hand-h">Selected work</h2>
-        <p><b id="wkCount">21</b> research and side projects. Filter by field, open <b>Full story</b> on any card, or click Live report.</p>
+        <p><b id="wkCount">22</b> research and side projects. Filter by field, open <b>Full story</b> on any card, or click Live report.</p>
         <div class="wk-nav"><button type="button" id="wkPrev" aria-label="Previous projects">‹</button><button type="button" id="wkNext" aria-label="Next projects">›</button></div>
       </div>
       <div class="wk-filters" id="wkFilters" role="group" aria-label="Filter projects by field"></div>
@@ -905,6 +905,14 @@ const A={
    const gs=i=>(q(i)+q(i+500)+q(i+900)-1.5)/1.5;for(let i=0;i<170;i++){const k=i%2,X=L+W*(k?.68:.32)+gs(i)*W*.3+Math.sin(t+i)*1.5,Y=T+H*(k?.38:.62)+gs(i+200)*H*.42+Math.cos(t*.8+i)*1.5;x.fillStyle=k?col.hm:col.eo;x.globalAlpha=.8;x.beginPath();x.arc(X,Y,2.2,0,TAU);x.fill()}
    x.globalAlpha=1;const d=ez((t%7)/2.5),w=Math.sin(t*.6)*.06;x.strokeStyle=col.pp;x.setLineDash([5,5]);x.lineWidth=1.6;x.beginPath();for(let i=0;i<=40;i++){const u=i/40;if(u>d)break;const X=L+W*(.42+w+.16*Math.sin(u*Math.PI*1.2)-.08*u),Y=T+H*u;i?x.lineTo(X,Y):x.moveTo(X,Y)}x.stroke();x.setLineDash([]);
    txt(x,9.5,"RBF SVM · 99.02%",L+W,T-10,col.pp,"right")},
+ swap(x,L,T,W,H,t,q){const cols=12,rows=8,tt=t%9,gx=W/cols,gy=H/rows,r=Math.max(2.4,Math.min(gx,gy)*.3),sr=4,sc=4,who=j=>Math.floor(j/2),pal=[col.eo,col.hm,col.sg,col.pp,"#C9A86A","#7FB3C8"];
+   const scan=ez((tt-2.2)/1.6),found=tt>4.2;
+   for(let i=0;i<rows;i++)for(let j=0;j<cols;j++){const g=ez(tt*1.6-j*.09-i*.02);if(g<=0)continue;let p=who(j);if(i===sr&&j===sc)p=who(sc+2);if(i===sr&&j===sc+2)p=who(sc);
+     x.globalAlpha=found&&i!==sr?.35:1;x.fillStyle=pal[p%pal.length];x.beginPath();x.arc(L+gx*(j+.5),T+gy*(i+.5),r*g,0,TAU);x.fill()}
+   x.globalAlpha=1;if(tt>2.2){const y=T+gy*sr*scan;x.strokeStyle=col.pp;x.lineWidth=1.4;x.strokeRect(L+1,y+1,W-2,gy-2)}
+   if(found){const k=ez((tt-4.2)/.8),ax=L+gx*(sc+.5),bx=L+gx*(sc+2.5),cy=T+gy*(sr+.5);x.strokeStyle=col.eo;x.lineWidth=2.2;[ax,bx].forEach(X=>{x.beginPath();x.arc(X,cy,(r+4)*k,0,TAU);x.stroke()});
+     x.lineCap="round";x.beginPath();x.moveTo(ax,cy-r-6);x.quadraticCurveTo((ax+bx)/2,cy-r-6-gy*1.3*k,bx,cy-r-6);x.stroke()}
+   txt(x,10,found?"SWAP FOUND · E05 ↔ E07":"CHECKING ROW "+"ABCDEFGH"[Math.min(sr,Math.floor(scan*sr+.001))],L+W,T-10,found?col.eo:col.dim2,"right")},
  cells(x,L,T,W,H,t,q){x.fillStyle="#E9A9BA";x.fillRect(L-8,T-8,W+16,H+16);const n=Math.floor(W*H/420),sw=((t%6)/4.5);let found=0;
    for(let i=0;i<n;i++){const cx=L+q(i)*W,cy=T+q(i+400)*H,s=8+q(i+800)*7;x.fillStyle=`rgba(217,113,142,${.35+q(i+1200)*.4})`;x.beginPath();x.ellipse(cx,cy,s,s*.8,q(i+1600)*3,0,TAU);x.fill();
      x.fillStyle="#4A3F78";x.beginPath();x.ellipse(cx,cy,s*.38,s*.3,q(i+2000)*3,0,TAU);x.fill();if(cx<L+W*sw){found++;x.strokeStyle="#ECEDE6";x.lineWidth=1.3;x.beginPath();x.arc(cx,cy,s*.55,0,TAU);x.stroke()}}
@@ -993,7 +1001,11 @@ tick(); setInterval(tick,1000);
 
 /* projects */
 const P = [
-  {k:"stack",when:"May to Oct 2026",t:"Gut microbes after bariatric surgery",org:"MSc thesis, IBIMA Plataforma BIONAND, Málaga",tags:["QIIME2","mixOmics","R","16S rRNA","Metabolomics","RYGB vs SG"],
+  {k:"swap",L:[["Live tool", "https://bymankirat.github.io/swapseq/"], ["Methods & validation", "https://bymankirat.github.io/swapseq/validation.html"], ["Code", "https://github.com/bymankirat/swapseq"], ["DOI", "https://doi.org/10.5281/zenodo.23963612"]],when:"Nov 2026",t:"SwapSeq: catching sample mix-ups in microbiome studies",org:"My own open-source tool in JavaScript, tested on five public studies",tags:["Microbiome QC","JavaScript","16S + shotgun","Self-calibration","Open source (GPL-3.0)","DOI"],
+  sum:"A free browser tool that finds swapped tubes, wrong labels and sample-sheet shifts from each person's microbial fingerprint. Data never leaves the user's computer.",
+  text:"<h4>The problem</h4><p>In studies that sample the same people again and again, a swapped tube or a sample sheet that slips by one row quietly mixes up who a sample belongs to, and the results change without anyone noticing. Each person's microbiome is a fingerprint, so the data itself can catch these errors.</p><h4>What I built</h4><ul><li>A tool that checks whether every sample came from the person on its label, and catches three errors: swapped tubes, single wrong labels, and runs of tubes on a plate that each carry their neighbour's label</li><li>Two fingerprints per sample: a depth-matched soft Jaccard that keeps the rare, person-specific taxa, and the Aitchison distance</li><li>Self-calibration: it plants errors in a copy of the user's own table to learn what a mix-up looks like in that study, turns scores into probabilities, and reports its own power</li><li>Evidence for every flag: shared rare taxa, household look-alikes, plate positions of swap pairs, and a sample-sheet shift scan</li><li>Runs entirely in the browser, with no server, cookies or tracking; reads QIIME 2 .qza, BIOM and text tables and writes a QC audit table and a Methods sentence</li></ul><h4>How I tested it</h4><p>4,732 samples from five public studies (Student Microbiome Project, Immigration Microbiome Project, Minnesota diet study, ECAM infants and MDSINE2 mice), with errors planted at a 1% rate, 30 or more times each, against the same pipeline with Bray-Curtis distance.</p><h4>Result</h4><p>In adult gut 16S it strongly flagged 92% of swapped samples, against 23% with Bray-Curtis, with at most 0.4 false alarms per 1,000 samples in every dataset. It found a real tube swap that a study's authors had corrected, without being told where to look. In infants and in mice given one donor's stool it reports low power instead of inventing flags. The full method, every result and the limitations are on the public Methods page, and the release is archived on Zenodo with a DOI.</p>"},
+
+ {k:"stack",when:"May to Oct 2026",t:"Gut microbes after bariatric surgery",org:"MSc thesis, IBIMA Plataforma BIONAND, Málaga",tags:["QIIME2","mixOmics","R","16S rRNA","Metabolomics","RYGB vs SG"],
   sum:"Linking gut bacteria to faecal metabolites before and after RYGB and sleeve gastrectomy, against a healthy lean reference.",
   text:"<h4>Aim</h4><p>To characterise changes in gut microbiota and faecal metabolomic profiles after bariatric surgery, and to explore associations between the two omics layers through an integrated multi-omics approach.</p><h4>How I did it</h4><ul><li>A longitudinal design: patients compared before and after surgery, with healthy lean controls as a reference</li><li>Ion Torrent 16S rRNA reads processed with custom QIIME2 pipelines. 16S sequencing reads a marker gene every bacterium carries, showing who is in a sample and in what proportions.</li><li>Faecal metabolomics analysed in R and integrated with the microbiome data in mixOmics (sPLS, DIABLO), an R package for analysing several omics datasets measured on the same people</li></ul><p>The results are not yet published, so I am not sharing them here.</p>"},
 
@@ -1068,6 +1080,11 @@ function draw(cv,kind,seed){
   x.fillStyle=C.bg;x.fillRect(0,0,w,h);const r=rng(seed);const pal=[C.eo,C.hm,C.sg,C.pp,C.dk];
   const m=Math.min(w,h)*.1;
   if(kind==="stack"){const n=22,bw=(w-2*m)/n;for(let i=0;i<n;i++){let v=[1,2,3,4,5].map(()=>r()+.15),s=v.reduce((a,b)=>a+b),y=m;v.forEach((q,j)=>{const hh=(h-2*m)*q/s;x.fillStyle=pal[j];x.fillRect(m+i*bw+1,y,bw-2,hh-1);y+=hh})}}
+  if(kind==="swap"){const cols=12,rows=8,gx=(w-2*m)/cols,gy=(h-2*m)/rows,rad=Math.max(2.5,Math.min(gx,gy)*.32),sr=4,sc=5;const who=c=>Math.floor(c/2);const cc=[C.eo,C.hm,C.sg,C.pp,"#C9A86A","#7FB3C8"];
+    for(let i=0;i<rows;i++)for(let j=0;j<cols;j++){let p=who(j);if(i===sr&&j===sc)p=who(sc+1);else if(i===sr&&j===sc+1)p=who(sc);x.fillStyle=cc[p%cc.length];x.globalAlpha=(i===sr)?1:.5;x.beginPath();x.arc(m+gx*(j+.5),m+gy*(i+.5),rad,0,7);x.fill()}
+    x.globalAlpha=1;x.strokeStyle="rgba(236,237,230,.55)";x.lineWidth=1.2;x.beginPath();x.roundRect?x.roundRect(m+2,m+gy*sr+2,w-2*m-4,gy-4,gy/2):x.rect(m+2,m+gy*sr+2,w-2*m-4,gy-4);x.stroke();
+    [sc,sc+1].forEach(j=>{x.strokeStyle=C.eo;x.lineWidth=2.4;x.beginPath();x.arc(m+gx*(j+.5),m+gy*(sr+.5),rad+4,0,7);x.stroke()});
+    const ax=m+gx*(sc+.5),bx=m+gx*(sc+1.5),y0=m+gy*sr-2;x.strokeStyle=C.eo;x.lineWidth=2;x.lineCap="round";x.beginPath();x.moveTo(ax,y0);x.quadraticCurveTo((ax+bx)/2,y0-gy*1.1,bx,y0);x.stroke()}
   if(kind==="grid"){const N=30,pts=[];for(let i=0;i<N;i++)pts.push([m+r()*(w-2*m),m+r()*(h-2*m)]);x.strokeStyle="rgba(236,237,230,.22)";x.lineWidth=1;pts.forEach((p,i)=>{const d=pts.map((q,j)=>[j,(q[0]-p[0])**2+(q[1]-p[1])**2]).filter(e=>e[0]!==i).sort((a,b)=>a[1]-b[1]).slice(0,2);d.forEach(e=>{x.beginPath();x.moveTo(p[0],p[1]);x.lineTo(pts[e[0]][0],pts[e[0]][1]);x.stroke()})});pts.forEach((p,i)=>{const v=r();x.fillStyle=v<.45?C.eo:v<.7?C.hm:C.sg;const big=i%5===0;x.beginPath();x.arc(p[0],p[1],big?6:3.6,0,7);x.fill();if(big){x.strokeStyle="rgba(236,237,230,.6)";x.lineWidth=1.2;x.beginPath();x.arc(p[0],p[1],9,0,7);x.stroke();x.strokeStyle="rgba(236,237,230,.22)";x.lineWidth=1}})}
   if(kind==="load"){const n=Math.max(80,Math.floor((w-2*m)/3)),f=t=>.5-.22*Math.sin(t*Math.PI*4-1.2)-.12*Math.sin(t*Math.PI*8+.4);x.fillStyle="rgba(154,143,216,.22)";x.beginPath();for(let i=0;i<=n;i++){const t=i/n;x.lineTo(m+t*(w-2*m),h*(f(t)-.09))}for(let i=n;i>=0;i--){const t=i/n;x.lineTo(m+t*(w-2*m),h*(f(t)+.09))}x.closePath();x.fill();x.strokeStyle=C.hm;x.lineWidth=2;x.setLineDash([6,5]);x.beginPath();for(let i=0;i<=n;i++){const t=i/n;const px=m+t*(w-2*m),py=h*f(t);i?x.lineTo(px,py):x.moveTo(px,py)}x.stroke();x.setLineDash([]);x.strokeStyle=C.eo;x.lineWidth=2.4;x.lineCap="round";x.beginPath();for(let i=0;i<=n;i++){const t=i/n;const px=m+t*(w-2*m),py=h*(f(t)+(r()-.5)*.05);i?x.lineTo(px,py):x.moveTo(px,py)}x.stroke()}
   if(kind==="wind"){x.strokeStyle="rgba(236,237,230,.16)";x.lineWidth=1;for(let g=1;g<4;g++){x.beginPath();x.moveTo(m,m+(h-2*m)*g/4);x.lineTo(w-m,m+(h-2*m)*g/4);x.stroke()}const n=11,X=i=>m+(w-2*m)*i/(n-1),top=i=>m+(h-2*m)*(.12+.42*(i/(n-1))**1.1),low=i=>m+(h-2*m)*(.16+.74*(i/(n-1))**1.15);x.fillStyle="rgba(217,113,142,.2)";x.beginPath();for(let i=0;i<n;i++)x.lineTo(X(i),top(i));for(let i=n-1;i>=0;i--)x.lineTo(X(i),low(i));x.closePath();x.fill();[[top,C.sg],[low,C.eo]].forEach(([f,c])=>{x.strokeStyle=c;x.lineWidth=2.4;x.lineCap="round";x.beginPath();for(let i=0;i<n;i++)i?x.lineTo(X(i),f(i)):x.moveTo(X(i),f(i));x.stroke();x.fillStyle=c;for(let i=0;i<n;i++){x.beginPath();x.arc(X(i),f(i),3.2,0,7);x.fill()}})}
@@ -1095,9 +1112,9 @@ function draw(cv,kind,seed){
 
 /* fields for the filter and the tag on each card */
 const FIELD={grid:"energy",load:"energy",wind:"energy",rail:"energy",trials:"clinical",km:"clinical",health:"clinical",bars:"clinical",ribbon:"clinical",
-  stack:"omics",heat:"omics",tree:"omics",flow:"data",jobs:"data",bridge:"data",uplift:"data",pca:"data",reads:"lab",path:"lab",plant:"lab",cells:"lab"};
+  stack:"omics",swap:"omics",heat:"omics",tree:"omics",flow:"data",jobs:"data",bridge:"data",uplift:"data",pca:"data",reads:"lab",path:"lab",plant:"lab",cells:"lab"};
 const FN={clinical:"Clinical & health",omics:"Omics & genomics",energy:"Energy & transport",data:"Data & business",lab:"Wet lab"};
-const SUB={stack:"Microbiome · MSc thesis",trials:"Clinical trials",km:"Drug safety",health:"Public health",bars:"Cancer · machine learning",ribbon:"Cancer biomarker",
+const SUB={stack:"Microbiome · MSc thesis",swap:"Microbiome QC · my tool",trials:"Clinical trials",km:"Drug safety",health:"Public health",bars:"Cancer · machine learning",ribbon:"Cancer biomarker",
   heat:"Virology",tree:"Plant genomics",grid:"Power grid",load:"Electricity demand",wind:"Wind energy",rail:"Commuter rail",flow:"Rivers & water",jobs:"Labour market",
   bridge:"Retail KPIs",uplift:"Marketing analytics",pca:"Machine learning",reads:"NGS diagnostics",path:"Neuroendocrinology",plant:"Plant biotech",cells:"Histology"};
 /* build cards */
