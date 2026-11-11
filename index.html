@@ -731,7 +731,7 @@ dialog[open]{animation:pop .28s cubic-bezier(.2,.9,.3,1.15)}
     <div class="works-sticky">
       <div class="works-head">
         <h2 class="hand-h">Selected work</h2>
-        <p><b id="wkCount">22</b> research and side projects. Filter by field, open <b>Full story</b> on any card, or click Live report.</p>
+        <p>My thesis, my own tool and my research roles come first. Showing <b id="wkCount">6</b>; choose <b>All</b> for the side projects too. Open <b>Full story</b> on any card.</p>
         <div class="wk-nav"><button type="button" id="wkPrev" aria-label="Previous projects">‹</button><button type="button" id="wkNext" aria-label="Next projects">›</button></div>
       </div>
       <div class="wk-filters" id="wkFilters" role="group" aria-label="Filter projects by field"></div>
@@ -1114,9 +1114,12 @@ function draw(cv,kind,seed){
 const FIELD={grid:"energy",load:"energy",wind:"energy",rail:"energy",trials:"clinical",km:"clinical",health:"clinical",bars:"clinical",ribbon:"clinical",
   stack:"omics",swap:"omics",heat:"omics",tree:"omics",flow:"data",jobs:"data",bridge:"data",uplift:"data",pca:"data",reads:"lab",path:"lab",plant:"lab",cells:"lab"};
 const FN={clinical:"Clinical & health",omics:"Omics & genomics",energy:"Energy & transport",data:"Data & business",lab:"Wet lab"};
-const SUB={stack:"Microbiome · MSc thesis",swap:"Microbiome QC · my tool",trials:"Clinical trials",km:"Drug safety",health:"Public health",bars:"Cancer · machine learning",ribbon:"Cancer biomarker",
+const SUB={stack:"MSc thesis · main project",swap:"My own tool · microbiome QC",trials:"Clinical trials",km:"Drug safety",health:"Public health",bars:"Coursework · machine learning",ribbon:"Cancer biomarker",
   heat:"Virology",tree:"Plant genomics",grid:"Power grid",load:"Electricity demand",wind:"Wind energy",rail:"Commuter rail",flow:"Rivers & water",jobs:"Labour market",
-  bridge:"Retail KPIs",uplift:"Marketing analytics",pca:"Machine learning",reads:"NGS diagnostics",path:"Neuroendocrinology",plant:"Plant biotech",cells:"Histology"};
+  bridge:"Retail KPIs",uplift:"Marketing analytics",pca:"Coursework · machine learning",reads:"NGS diagnostics",path:"Neuroendocrinology",plant:"Plant biotech",cells:"Histology"};
+/* order: the thesis first, then my own tool and research roles, then independent projects, coursework last */
+const MAIN=["stack","swap","reads","path","plant","ribbon"];
+{const LAST=["bars","pca"],rk=p=>MAIN.includes(p.k)?MAIN.indexOf(p.k):LAST.includes(p.k)?900+LAST.indexOf(p.k):100,at=new Map(P.map((p,i)=>[p,i]));P.sort((a,b)=>rk(a)-rk(b)||at.get(a)-at.get(b))}
 /* build cards */
 function linksHTML(L){return L.map(([n,u])=>`<a href="${u}" target="_blank" rel="noopener">${n.replace(/ report$/,'<span class="lr"> report</span>')} ↗</a>`).join("")}
 const track=document.getElementById("track");
@@ -1183,12 +1186,11 @@ addEventListener("resize",layoutWorks);
 layoutWorks();
 new IntersectionObserver(es=>es.forEach(e=>works.classList.toggle("inview",e.isIntersecting))).observe(works);
 (function(){const wf=document.getElementById("wkFilters");if(!wf)return;const counts={};P.forEach(p=>{const f=FIELD[p.k]||"data";counts[f]=(counts[f]||0)+1});
-  document.getElementById("wkCount").textContent=P.length;
-  [["all","All",P.length],...Object.keys(FN).filter(k=>counts[k]).map(k=>[k,FN[k],counts[k]])].forEach(([k,n,c],j)=>{const b=document.createElement("button");b.type="button";b.dataset.f=k;b.setAttribute("aria-pressed",String(!j));b.innerHTML=`${n}<sup>${c}</sup>`;wf.appendChild(b)});
+  const inMain=c=>MAIN.includes(P[+c.dataset.i].k),show=f=>{track.querySelectorAll(".card").forEach(c=>{c.hidden=!(f==="all"||(f==="main"?inMain(c):c.dataset.f===f))});document.getElementById("wkCount").textContent=f==="all"?P.length:f==="main"?MAIN.length:counts[f];layoutWorks()};
+  [["main","Main work",MAIN.length],["all","All",P.length],...Object.keys(FN).filter(k=>counts[k]).map(k=>[k,FN[k],counts[k]])].forEach(([k,n,c],j)=>{const b=document.createElement("button");b.type="button";b.dataset.f=k;b.setAttribute("aria-pressed",String(!j));b.innerHTML=`${n}<sup>${c}</sup>`;wf.appendChild(b)});
   wf.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;wf.querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));
-    const f=b.dataset.f;track.querySelectorAll(".card").forEach(c=>{c.hidden=!(f==="all"||c.dataset.f===f)});
-    document.getElementById("wkCount").textContent=f==="all"?P.length:counts[f];
-    layoutWorks();const y=works.offsetTop;if(window.__lenis)window.__lenis.scrollTo(y,{immediate:true});else scrollTo(0,y)})})();
+    show(b.dataset.f);const y=works.offsetTop;if(window.__lenis)window.__lenis.scrollTo(y,{immediate:true});else scrollTo(0,y)});
+  show("main")})();
 
 /* loader */
 const ld=document.getElementById("loader"),ldn=document.getElementById("ldnum"),ldp=document.getElementById("ldpg");
